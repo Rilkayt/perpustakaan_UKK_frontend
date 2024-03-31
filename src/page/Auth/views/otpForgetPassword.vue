@@ -17,6 +17,7 @@
           v-model="inputPoint1"
           @keydown="checkInput"
           @input="checkFullOtp"
+          @change="checkFullOtp"
           id="input1"
         />
         <input
@@ -27,6 +28,7 @@
           v-model="inputPoint2"
           @keydown="checkInput"
           @input="checkFullOtp"
+          @change="checkFullOtp"
           id="input2"
         />
         <input
@@ -37,6 +39,7 @@
           v-model="inputPoint3"
           @keydown="checkInput"
           @input="checkFullOtp"
+          @change="checkFullOtp"
           id="input3"
         />
         <input
@@ -47,6 +50,7 @@
           v-model="inputPoint4"
           @keydown="checkInput"
           @input="checkFullOtp"
+          @change="checkFullOtp"
           id="input4"
         />
       </div>
@@ -110,11 +114,11 @@
             fill="currentColor"
           />
         </svg>
-        {{ !buttonLoading ? "Daftar" : "Loading" }}
+        {{ !buttonLoading ? "Selanjutnnya" : "Loading" }}
       </button>
 
       <p class="pt-[2rem] pb-[30px] text-center font-semibold">
-        Sudah Punya Akun ?
+        Ingat Akun ?
         <span class="text-[#1459DF]"><a href="">Masuk</a></span>
       </p>
     </div>
@@ -130,7 +134,7 @@ import { useToast } from "vue-toastification";
 let timeExpired = new Date().getTime() + 1000 * 60 * 1;
 
 export default {
-  name: "otpRegister",
+  name: "otpForgetPassword",
   setup() {
     const router = useRouter();
     const store = useStore();
@@ -221,6 +225,7 @@ export default {
       }
     };
 
+    let otpDoneFunc = false;
     const checkFullOtp = async () => {
       if (
         inputPoint1.value != "" &&
@@ -228,6 +233,11 @@ export default {
         inputPoint3.value != "" &&
         inputPoint4.value != ""
       ) {
+        if (otpDoneFunc === true) {
+          otpDoneFunc = false;
+          return;
+        }
+        otpDoneFunc = true;
         buttonLoading.value = true;
         otpFull =
           inputPoint1.value +
@@ -235,27 +245,21 @@ export default {
           inputPoint3.value +
           inputPoint4.value;
 
-        let data = store.state.Auth.dataRegister;
-        data.otp = otpFull;
-        await store.dispatch("Auth/registerStart", data).then((res) => {
-          console.log(res);
-          buttonLoading.value = false;
-          if (res.status == 200) {
-            toast.success("Berhasil Mendaftar Akun", {
-              hideProgressBar: true,
-              closeButton: false,
-            });
-            router.push({ name: "login" });
-          } else if (res.response.data[0].message == "otp tidak valid") {
-            //
-            toast.error("otp yang di masukan salah", {
-              hideProgressBar: true,
-              closeButton: false,
-            });
-          } else {
-            window.location.href = "/daftar";
-          }
-        });
+        await store
+          .dispatch("Auth/checkOtpForgetPassword", otpFull)
+          .then((res) => {
+            if (res.status === 200) {
+              store.commit("Auth/addOtpForget", otpFull);
+              router.push({ name: "formForgetPassword" });
+              buttonLoading.value = false;
+            } else {
+              toast.error("OTP yang dimasukan salah", {
+                hideProgressBar: true,
+                closeButton: false,
+              });
+              buttonLoading.value = false;
+            }
+          });
         // console.log(data);
       }
     };
@@ -283,9 +287,8 @@ export default {
 
     const postAgainOtp = async () => {
       buttonLoadingOTP.value = true;
-      let dataRegister = store.state.Auth.dataRegister;
       await store
-        .dispatch("Auth/sendOtp", { email: dataRegister.email })
+        .dispatch("Auth/sendOtpForgetPassword", store.state.Auth.emailUser)
         .then((res) => {
           console.log(res);
           if (res.status == 200) {
@@ -300,20 +303,18 @@ export default {
           buttonLoadingOTP.value = false;
         });
     };
-
-    let dataRegister = store.state.Auth.dataRegister;
+    let emailUser = store.state.Auth.emailUser;
     onMounted(async () => {
-      timeExpired = new Date().getTime() + 1000 * 60 * 1;
       await countDownOtp();
       inputRefs.input1 = document.getElementById("input1");
       inputRefs.input2 = document.getElementById("input2");
       inputRefs.input3 = document.getElementById("input3");
       inputRefs.input4 = document.getElementById("input4");
-      if (Object.keys(dataRegister).length == 0) {
+      if (emailUser == "") {
         // router.push({ name: "register" });
-        window.location.href = "/daftar";
+        window.location.href = "/lupa-kata-sandi";
       }
-      console.log(dataRegister);
+      console.log(emailUser);
     });
     return {
       inputPoint1,

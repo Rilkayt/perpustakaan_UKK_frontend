@@ -1,5 +1,7 @@
 const state = {
-  nama: "ini dari stae lohhh uhuy",
+  dataRegister: {},
+  emailUser: "",
+  otpForget: "",
 };
 
 export default state;

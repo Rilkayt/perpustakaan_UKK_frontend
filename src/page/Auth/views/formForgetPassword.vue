@@ -7,30 +7,15 @@
     >
       <h3 class="font-bold text-[30px] font-gunjarati py-[20px]">Masuk</h3>
 
-      <div class="flex flex-col pb-[20px]">
-        <label for="usernameEmail" class="font-medium pb-[3px] font-gunjarati"
-          >Username / Email</label
-        >
-        <input
-          type="text"
-          id="usernameEmail"
-          :placeholder="'Masukan Username atau Email'"
-          class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
-          required
-          title="username atau email wajib diisi"
-          v-model="usernameEmail"
-        />
-      </div>
-
-      <div>
-        <label for="KataSandi" class="font-medium pb-[3px] font-gunjarati"
-          >Kata Sandi</label
+      <div class="pb-[15px]">
+        <label for="password" class="font-medium pb-[3px] font-gunjarati"
+          >Kata Sandi Baru</label
         >
 
         <div class="relative">
           <input
             :type="buttonEye ? 'text' : 'password'"
-            id="KataSandi"
+            id="password"
             :placeholder="'Masukan Kata Sandi'"
             required
             class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white w-[100%] tablet:pe-[8%] mobile:pe-[20%]"
@@ -49,15 +34,37 @@
           </button>
         </div>
       </div>
+      <div class="pb-[15px]">
+        <label for="passwordConfirm" class="font-medium pb-[3px] font-gunjarati"
+          >Konfirmasi Kata Sandi Baru</label
+        >
 
-      <p
-        class="relative pt-1 pb-6 font-semibold text-[#1459DF] desktop:text-[12px]"
-      >
-        <a href="/lupa-kata-sandi"> Lupa Kata Sandi ? </a>
-      </p>
+        <div class="relative">
+          <input
+            :type="buttonEyeConfirm ? 'text' : 'password'"
+            id="passwordConfirm"
+            :placeholder="'Masukan konfirmasi Kata Sandi'"
+            required
+            class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white w-[100%] tablet:pe-[8%] mobile:pe-[20%]"
+            v-model="passwordConfirm"
+          />
+          <button
+            class="absolute h-[max-content] top-0 end-0 p-3.5 rounded-e-md dark:focus:outline-none active:outline-none"
+            @click="buttonEyeActionConfirm"
+          >
+            <span class="flex-shrink-0 text-gray-400" v-if="!buttonEyeConfirm"
+              ><font-awesome-icon :icon="['far', 'eye']"
+            /></span>
+            <span class="flex-shrink-0 text-gray-400" v-if="buttonEyeConfirm"
+              ><font-awesome-icon icon="fa-regular fa-eye-slash"
+            /></span>
+          </button>
+        </div>
+      </div>
+
       <button
         class="bg-[#E8C13C] w-[100%] h-[48px] rounded-[6px] font-bold font-gunjarati hover:bg-[#e8c03ce0] disabled:bg-[#d4b452e0]"
-        @click="loginStart"
+        @click="changePasswordStart"
         :disabled="buttonLoading"
         type="button"
       >
@@ -79,91 +86,109 @@
             fill="currentColor"
           />
         </svg>
-        {{ !buttonLoading ? "Masuk" : "Loading" }}
+        {{ !buttonLoading ? "Simpan" : "Loading" }}
       </button>
       <p class="pt-[3rem] pb-[20px] text-center font-semibold">
-        Belum Punya Akun ?
-        <span class="text-[#1459DF]"><a href="/daftar">Daftar</a></span>
+        Ingat Akun ?
+        <span class="text-[#1459DF]"><a href="/masuk">Masuk</a></span>
       </p>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useToast } from "vue-toastification";
+import { useRouter } from "vue-router";
 
 export default {
-  name: "login",
+  name: "formForgetPassword",
   setup() {
     const store = useStore();
+    const router = useRouter();
 
     const toast = useToast();
-    const usernameEmail = ref("");
     const password = ref("");
+    const passwordConfirm = ref("");
 
     const buttonLoading = ref(false);
     const buttonEye = ref(false);
-    const postLoginReady = async (payload) => {
-      let response = await store.dispatch("Auth/loginStart", payload);
-      return response;
-    };
+    const buttonEyeConfirm = ref(false);
 
     const buttonEyeAction = () => {
       buttonEye.value = !buttonEye.value;
     };
-    const loginStart = async () => {
-      if (usernameEmail.value != "" && password.value != "") {
-        buttonLoading.value = true;
-        let data = {
-          user: usernameEmail.value,
-          password: password.value,
-        };
+    const buttonEyeActionConfirm = () => {
+      buttonEyeConfirm.value = !buttonEyeConfirm.value;
+    };
 
-        await postLoginReady(data).then((res) => {
-          console.log(res);
-          if (res.status === 200) {
-            const timeExpired = 7 * 24 * 60 * 60 * 1000;
-            const tokenData = {
-              token: res.data[1].data.token,
-              expired: new Date().getTime() + timeExpired,
-            };
-            localStorage.setItem("token", JSON.stringify(tokenData));
-            toast.success("Berhasil Masuk", {
-              hideProgressBar: true,
-              closeButton: false,
-            });
-            buttonLoading.value = false;
-          } else if (res.code === "ERR_NETWORK") {
-            toast.error("terdapat masalah pada server", {
-              hideProgressBar: true,
-              closeButton: false,
-            });
-            buttonLoading.value = false;
-          } else {
-            toast.error(res.response.data[0].message, {
-              hideProgressBar: true,
-              closeButton: false,
-            });
-            buttonLoading.value = false;
-          }
-        });
+    const changePasswordStart = async () => {
+      if (password.value != "" && passwordConfirm.value != "") {
+        buttonLoading.value = true;
+        if (password.value === passwordConfirm.value) {
+          let data = {
+            email: store.state.Auth.emailUser,
+            password: password.value,
+            otp: store.state.Auth.otpForget,
+          };
+
+          await store.dispatch("Auth/changePasswordStart", data).then((res) => {
+            console.log(res);
+            if (res.status === 200) {
+              toast.success("Berhasil Mengubah Kata Sandi", {
+                hideProgressBar: true,
+                closeButton: false,
+              });
+              router.push({ name: "login" });
+              buttonLoading.value = false;
+            } else if (res.code === "ERR_NETWORK") {
+              toast.error("terdapat masalah pada server", {
+                hideProgressBar: true,
+                closeButton: false,
+              });
+              buttonLoading.value = false;
+            } else {
+              toast.error(res.response.data[0].message, {
+                hideProgressBar: true,
+                closeButton: false,
+              });
+              buttonLoading.value = false;
+            }
+          });
+        } else {
+          toast.error("Kata Sandi Tidak Sama", {
+            hideProgressBar: true,
+            closeButton: false,
+          });
+          buttonLoading.value = false;
+        }
       } else {
-        toast.warning("username/email & password wajib diisi", {
+        toast.warning("kata sandi wajib diisi", {
           hideProgressBar: true,
           closeButton: false,
         });
       }
     };
 
+    onMounted(() => {
+      if (
+        store.state.Auth.emailUser === "" &&
+        store.state.Auth.otpForget === ""
+      ) {
+        window.location.href = "/lupa-kata-sandi";
+      }
+    });
+
     return {
-      usernameEmail,
       password,
-      loginStart,
+      passwordConfirm,
       buttonLoading,
       buttonEye,
+      buttonEyeConfirm,
       buttonEyeAction,
+      buttonEyeActionConfirm,
+      changePasswordStart,
     };
   },
 };
