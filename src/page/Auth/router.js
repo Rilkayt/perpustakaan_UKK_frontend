@@ -15,31 +15,49 @@ const routes = [
         path: "masuk",
         component: login,
         name: "login",
+        meta: {
+          requiredAuth: false,
+        },
       },
       {
         path: "daftar",
         component: register,
         name: "register",
+        meta: {
+          requiredAuth: false,
+        },
       },
       {
         path: "otp-daftar",
         component: otpRegister,
         name: "otpRegister",
+        meta: {
+          requiredAuth: false,
+        },
       },
       {
         path: "lupa-kata-sandi",
         component: forgetPassword,
         name: "forgetPassword",
+        meta: {
+          requiredAuth: false,
+        },
       },
       {
         path: "otp-lupa-kata-sandi",
         component: otpForgetPassword,
         name: "otpForgetPassword",
+        meta: {
+          requiredAuth: false,
+        },
       },
       {
         path: "form-lupa-kata-sandi",
         component: formForgetPassword,
         name: "formForgetPassword",
+        meta: {
+          requiredAuth: false,
+        },
       },
     ],
   },

@@ -7,12 +7,36 @@ import App from "./App.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import {
+  faAngleDown,
+  faAngleUp,
   faArrowLeft,
+  faBook,
+  faBoxArchive,
+  faChartLine,
+  faCircleCheck,
+  faCircleMinus,
+  faClock,
   faHouseChimney,
+  faList,
   faStarOfLife,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faEye, faEyeSlash, faArrowLeft, faStarOfLife, faHouseChimney);
+library.add(
+  faEye,
+  faEyeSlash,
+  faArrowLeft,
+  faStarOfLife,
+  faHouseChimney,
+  faBook,
+  faBoxArchive,
+  faAngleDown,
+  faAngleUp,
+  faCircleMinus,
+  faCircleCheck,
+  faClock,
+  faList,
+  faChartLine
+);
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 

@@ -10,6 +10,9 @@ const routes = [
         path: "",
         component: dashboardPage,
         name: "dashboardPage",
+        meta: {
+          requiredAuth: true,
+        },
       },
     ],
   },

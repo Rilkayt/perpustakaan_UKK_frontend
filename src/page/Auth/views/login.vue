@@ -93,11 +93,13 @@
 import { ref } from "vue";
 import { useStore } from "vuex";
 import { useToast } from "vue-toastification";
+import { routerKey, useRouter } from "vue-router";
 
 export default {
   name: "login",
   setup() {
     const store = useStore();
+    const router = useRouter();
 
     const toast = useToast();
     const usernameEmail = ref("");
@@ -134,6 +136,7 @@ export default {
               hideProgressBar: true,
               closeButton: false,
             });
+            router.push("/beranda");
             buttonLoading.value = false;
           } else if (res.code === "ERR_NETWORK") {
             toast.error("terdapat masalah pada server", {
