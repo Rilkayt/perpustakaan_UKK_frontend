@@ -6,9 +6,13 @@ import App from "./App.vue";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import { faArrowLeft, faStarOfLife } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faHouseChimney,
+  faStarOfLife,
+} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faEye, faEyeSlash, faArrowLeft, faStarOfLife);
+library.add(faEye, faEyeSlash, faArrowLeft, faStarOfLife, faHouseChimney);
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
