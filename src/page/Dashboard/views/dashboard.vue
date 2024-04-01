@@ -1,8 +1,6 @@
 <template>
-  <basePageTemp>
-    <template v-slot:title>
-      <titleTemp :titleName="'Beranda'" />
-    </template>
+  <basePageTemp :titleName="'Beranda'">
+    <template v-slot:content> oaskdokaso </template>
   </basePageTemp>
 </template>
 
@@ -16,5 +14,6 @@ export default defineComponent({
     basePageTemp,
     titleTemp,
   },
+  setup() {},
 });
 </script>

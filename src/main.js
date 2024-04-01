@@ -10,6 +10,7 @@ import {
   faAngleDown,
   faAngleUp,
   faArrowLeft,
+  faBars,
   faBook,
   faBoxArchive,
   faChartLine,
@@ -19,6 +20,7 @@ import {
   faHouseChimney,
   faList,
   faStarOfLife,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -35,7 +37,9 @@ library.add(
   faCircleCheck,
   faClock,
   faList,
-  faChartLine
+  faChartLine,
+  faBars,
+  faXmark
 );
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
