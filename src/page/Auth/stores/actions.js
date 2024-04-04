@@ -15,9 +15,14 @@ const actions = {
     return response;
   },
   getSchool: async ({ commit }) => {
-    let response = await api.get("/register/school", false).then((res) => {
-      return res;
-    });
+    let response = await api
+      .get("/register/school", false)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
     return response;
   },
   checkUserRegister: async ({ commit }, data) => {
@@ -44,7 +49,7 @@ const actions = {
   },
   sendOtp: async ({ commit }, data) => {
     let response = await api
-      .post("/register/send-otp", data)
+      .post("/register/send-otp", data, false)
       .then((res) => {
         return res;
       })
@@ -55,7 +60,7 @@ const actions = {
   },
   checkEmail: async ({ commit }, email) => {
     let response = await api
-      .get(`/login/check-email/${email}`)
+      .get(`/login/check-email/${email}`, false)
       .then((res) => {
         return res;
       })
@@ -79,7 +84,7 @@ const actions = {
   },
   checkOtpForgetPassword: async ({ commit }, otp) => {
     let response = await api
-      .get(`/login/checkOtpForget/${otp}`)
+      .get(`/login/checkOtpForget/${otp}`, false)
       .then((res) => {
         return res;
       })

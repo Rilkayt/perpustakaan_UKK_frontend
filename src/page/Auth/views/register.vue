@@ -129,7 +129,7 @@
               <option value="" class="text-black">Pilih Sekolah</option>
               <option
                 v-for="dataSchoolAll in dataSchool"
-                :value="dataSchoolAll.Kode"
+                :value="dataSchoolAll.Sekolah"
                 class="text-black"
               >
                 {{ dataSchoolAll.Sekolah }}
@@ -341,14 +341,18 @@ export default {
       }
     };
 
+    const checkUserRegister = async (data) => {
+      return await store.dispatch("Auth/checkUserRegister", data);
+    };
+
     let registerReadyConfirm = false;
     const registerReady = async () => {
-      buttonLoading.value = true;
-      if (registerReadyConfirm) {
-        registerReadyConfirm = false;
-        return;
-      }
-      registerReadyConfirm = true;
+      // buttonLoading.value = true;
+      // if (registerReadyConfirm) {
+      //   registerReadyConfirm = false;
+      //   return;
+      // }
+      // registerReadyConfirm = true;
       if (
         username.value != "" &&
         nameUser.value != "" &&
@@ -378,35 +382,33 @@ export default {
                   tipe: typeUser.value,
                   kode_admin: codeSchool.value,
                 };
-                await store
-                  .dispatch("Auth/checkUserRegister", data)
-                  .then(async (res) => {
-                    console.log(res);
-                    if (res.status === 200) {
-                      store.commit("Auth/addDataRegister", data);
-                      await store
-                        .dispatch("Auth/sendOtp", { email: data.email })
-                        .then((res) => {
-                          console.log(res);
-                          if (res.status == 200) {
-                            toast.success("OTP Telah Terkirim, cek email!", {
-                              hideProgressBar: true,
-                              closeButton: false,
-                            });
-                            router.push({ name: "otpRegister" });
-                            buttonLoading.value = false;
-                          }
+                await checkUserRegister(data).then(async (res) => {
+                  console.log(res);
+                  if (res.status === 200) {
+                    store.commit("Auth/addDataRegister", data);
+                    await store
+                      .dispatch("Auth/sendOtp", { email: data.email })
+                      .then((res) => {
+                        console.log(res);
+                        if (res.status == 200) {
+                          toast.success("OTP Telah Terkirim, cek email!", {
+                            hideProgressBar: true,
+                            closeButton: false,
+                          });
+                          router.push({ name: "otpRegister" });
                           buttonLoading.value = false;
-                        });
-                      buttonLoading.value = false;
-                    } else {
-                      toast.error(res.response.data[0].message, {
-                        hideProgressBar: true,
-                        closeButton: false,
+                        }
+                        buttonLoading.value = false;
                       });
-                      buttonLoading.value = false;
-                    }
-                  });
+                    buttonLoading.value = false;
+                  } else {
+                    toast.error(res.response.data[0].message, {
+                      hideProgressBar: true,
+                      closeButton: false,
+                    });
+                    buttonLoading.value = false;
+                  }
+                });
               } else {
                 toast.error("kata sandi tidak sama", {
                   hideProgressBar: true,

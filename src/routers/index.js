@@ -5,12 +5,13 @@ import { jwtDecode } from "jwt-decode";
 
 import Auth from "../page/Auth";
 import Dashboard from "../page/Dashboard";
+import Books from "../page/Books";
 
 const routes = [
   {
     path: "",
     component: App,
-    children: [...Auth.router, ...Dashboard.router],
+    children: [...Auth.router, ...Dashboard.router, ...Books.router],
   },
 ];
 

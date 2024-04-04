@@ -1,7 +1,11 @@
 import axios from "axios";
 
+let token = JSON.parse(localStorage.getItem("token"));
+
 const authConfig = () => {
-  return `Bearer ${localStorage.getItem("token")}`;
+  if (token.token != "") {
+    return `Bearer ${token.token}`;
+  }
 };
 
 const get = (url, auth = true) => {

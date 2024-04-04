@@ -3,6 +3,7 @@ import "./style.css";
 import router from "./routers";
 import store from "./stores";
 import App from "./App.vue";
+import moment from "moment";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
@@ -15,10 +16,14 @@ import {
   faBoxArchive,
   faChartLine,
   faCircleCheck,
+  faCircleInfo,
   faCircleMinus,
   faClock,
+  faFile,
   faHouseChimney,
+  faInfo,
   faList,
+  faStar,
   faStarOfLife,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -39,7 +44,11 @@ library.add(
   faList,
   faChartLine,
   faBars,
-  faXmark
+  faXmark,
+  faCircleInfo,
+  faInfo,
+  faStar,
+  faFile
 );
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -51,5 +60,6 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(Toast, { POSITION: POSITION.TOP_RIGHT, timeout: 3000 });
+app.use(moment);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app");

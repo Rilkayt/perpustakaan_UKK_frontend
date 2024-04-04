@@ -136,7 +136,9 @@ export default {
               hideProgressBar: true,
               closeButton: false,
             });
-            router.push("/beranda");
+            if (localStorage.getItem("token") !== null) {
+              window.location.href = "/beranda";
+            }
             buttonLoading.value = false;
           } else if (res.code === "ERR_NETWORK") {
             toast.error("terdapat masalah pada server", {

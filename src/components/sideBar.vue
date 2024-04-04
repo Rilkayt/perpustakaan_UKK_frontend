@@ -13,7 +13,7 @@
         </template>
       </div>
       <div class="height-menu">
-        <a href="" class="flex gap-3 mt-5">
+        <a href="/beranda" class="flex gap-3 mt-5">
           <font-awesome-icon
             :icon="['fas', 'house-chimney']"
             size="xl"
@@ -22,7 +22,7 @@
           <p class="text-[#E7E9EE] font-bold font-gunjarati pt-1">Beranda</p>
         </a>
 
-        <a href="" class="flex gap-4 mt-5">
+        <a href="/buku" class="flex gap-4 mt-5">
           <font-awesome-icon
             :icon="['fas', 'fa-book']"
             size="xl"
