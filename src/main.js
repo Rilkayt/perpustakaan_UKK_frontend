@@ -15,6 +15,7 @@ import {
   faBook,
   faBoxArchive,
   faChartLine,
+  faChevronDown,
   faCircleCheck,
   faCircleInfo,
   faCircleMinus,
@@ -23,6 +24,9 @@ import {
   faHouseChimney,
   faInfo,
   faList,
+  faMagnifyingGlass,
+  faPenToSquare,
+  faPlus,
   faStar,
   faStarOfLife,
   faXmark,
@@ -48,7 +52,12 @@ library.add(
   faCircleInfo,
   faInfo,
   faStar,
-  faFile
+  faFile,
+  faMagnifyingGlass,
+  faPlus,
+  faChevronDown,
+  faStar,
+  faPenToSquare
 );
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
