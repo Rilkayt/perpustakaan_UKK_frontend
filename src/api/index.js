@@ -17,20 +17,22 @@ const get = (url, auth = true) => {
   });
 };
 
-const post = (url, data, auth = true) => {
+const post = (url, data, auth = true, contentType) => {
   return axios.post(import.meta.env.VITE_URL_API + url, data, {
     headers: {
       Authorization: auth ? authConfig() : null,
-      "Content-Type": "application/json",
+      "Content-Type":
+        contentType == "formData" ? "multipart/form-data" : "application/json",
     },
   });
 };
 
-const put = (url, data, auth = true) => {
+const put = (url, data, auth = true, contentType) => {
   return axios.put(import.meta.env.VITE_URL_API + url, data, {
     headers: {
       Authorization: auth ? authConfig() : null,
-      "Content-Type": "application/json",
+      "Content-Type":
+        contentType == "formData" ? "multipart/form-data" : "application/json",
     },
   });
 };

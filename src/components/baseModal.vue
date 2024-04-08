@@ -3,6 +3,7 @@
     :class="`bg-[#a6a3a3bf] fixed flex h-screen justify-center left-0 top-0 w-screen ${
       actived ? 'z-50 opacity-100 duration-300' : 'opacity-0 -z-10 duration-500'
     }`"
+    :id="id"
   >
     <div
       :class="`flex flex-col h-full justify-end mobile:w-[18rem] tablet:w-[35rem] desktop:w-[50rem] z-50 ${
@@ -42,6 +43,7 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    id: String,
   },
   setup(props, { emit }) {
     watchEffect(() => {

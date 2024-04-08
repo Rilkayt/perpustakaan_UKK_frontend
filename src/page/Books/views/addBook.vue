@@ -17,11 +17,11 @@
         </div>
       </div>
 
-      <div class="grid tablet:grid-cols-2">
+      <div class="tablet:grid tablet:grid-cols-2">
         <template v-if="typeInput == 'importFileCSV'">
-          <div class="w-full px-4">
+          <div class="px-4 col-span-1">
             <div
-              class="bg-white p-4 rounded-xl shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] h-[200px] flex justify-center items-center flex-col"
+              class="bg-white p-3 tablet:col-span-1 rounded-xl shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] h-[200px] flex-col w-full"
             >
               <input
                 type="file"
@@ -45,12 +45,13 @@
               </div>
             </div>
             <button
-              class="font-gunjarati p-4 border-2 border-[#1859D4] hover:bg-[#1859D4] hover:duration-300 hover:text-white rounded-lg font-semibold mt-3 w-full shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)]"
+              class="font-gunjarati p-4 border-2 border-[#1859D4] hover:bg-[#1859D4] hover:duration-300 hover:text-white rounded-lg font-semibold mt-3 w-full shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] mb-3 tablet:col-span-1"
+              @click="uploadFileCSV"
             >
               Tambah Buku
             </button>
           </div>
-          <div class="px-4">
+          <div class="px-4 mb-3">
             <div
               class="bg-white p-4 rounded-xl shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)]"
             >
@@ -144,17 +145,19 @@
                   name="Judul"
                   id="Judul"
                   class="w-full h-[36px] rounded-lg outline-none px-3 font-gunjarati shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] bg-[#F3F3F3]"
+                  v-model="judulBookInput"
                 />
               </div>
               <div class="mb-2">
                 <label for="Penulis" class="font-gunjarati text-sm mb-2"
-                  >Judul</label
+                  >Penulis</label
                 ><br />
                 <input
                   type="text"
                   name="Penulis"
                   id="Penulis"
                   class="w-full h-[36px] rounded-lg outline-none px-3 font-gunjarati shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] bg-[#F3F3F3]"
+                  v-model="penulisBookInput"
                 />
               </div>
               <div class="mb-2">
@@ -166,6 +169,7 @@
                   name="Penerbit"
                   id="Penerbit"
                   class="w-full h-[36px] rounded-lg outline-none px-3 font-gunjarati shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] bg-[#F3F3F3]"
+                  v-model="penerbitBookInput"
                 />
               </div>
               <div class="mb-2">
@@ -177,6 +181,7 @@
                   name="Sinopsis"
                   id="Sinopsis"
                   class="w-full h-[72px] rounded-lg outline-none px-3 font-gunjarati shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] bg-[#F3F3F3]"
+                  v-model="sinopsisBookInput"
                 ></textarea>
               </div>
               <div class="mb-2">
@@ -188,6 +193,7 @@
                   name="tahunTerbit"
                   id="tahunTerbit"
                   class="w-full h-[36px] rounded-lg outline-none px-3 font-gunjarati shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] bg-[#F3F3F3]"
+                  v-model="tahunTerbitBookInput"
                 />
               </div>
               <div class="mb-2">
@@ -199,6 +205,7 @@
                   name="jumlah"
                   id="jumlah"
                   class="w-full h-[36px] rounded-lg outline-none px-3 font-gunjarati shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)] bg-[#F3F3F3]"
+                  v-model="jumlahBookInput"
                 />
               </div>
             </div>
@@ -206,6 +213,7 @@
           <div class="px-3 w-full col-span-2">
             <button
               class="font-gunjarati p-4 border-2 border-[#1859D4] hover:bg-[#1859D4] hover:duration-300 hover:text-white rounded-lg font-semibold mt-3 mb-3 w-full shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)]"
+              @click="addBookStart"
             >
               Tambah Buku
             </button>
@@ -217,10 +225,17 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, watchEffect } from "vue";
+import {
+  defineComponent,
+  ref,
+  onMounted,
+  watchEffect,
+  toDisplayString,
+} from "vue";
 import basePage from "../../../components/basePageTemp.vue";
 import { useStore } from "vuex";
 import { jwtDecode } from "jwt-decode";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
   name: "addBook",
@@ -229,6 +244,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+    const toast = useToast();
 
     let role = ref("");
 
@@ -258,19 +274,46 @@ export default defineComponent({
       nameFile.value = "";
     };
 
+    const selectedFile = ref(null);
+
     const addFile = (e) => {
       //   let file = URL.createObjectURL(inputFile.value);
       //   inputFileCsv.value = `url(${ file})`;
       console.log(e.target.files);
+      selectedFile.value = e.target.files[0];
       nameFile.value = e.target.files[0].name;
     };
 
     const drophandle = (e) => {
       e.preventDefault();
       console.log(e.dataTransfer.files);
+      selectedFile.value = e.dataTransfer.files[0];
       nameFile.value = e.dataTransfer.files[0].name;
     };
 
+    const uploadFileCSV = async () => {
+      if (selectedFile.value != null) {
+        await store
+          .dispatch("Books/uploadCsv", selectedFile.value)
+          .then((res) => {
+            if (res.status === 200) {
+              toast.success(res.data[0].message);
+              selectedFile.value = null;
+            }
+          });
+      } else {
+        toast.error("Belum Memilih Berkas");
+      }
+    };
+
+    const judulBookInput = ref("");
+    const penulisBookInput = ref("");
+    const penerbitBookInput = ref("");
+    const sinopsisBookInput = ref("");
+    const tahunTerbitBookInput = ref(0);
+    const jumlahBookInput = ref("");
+
+    const selectedBookCover = ref(null);
     const addImage = (e) => {
       //   let file = URL.createObjectURL(inputFile.value);
       //   inputFileCsv.value = `url(${ file})`;
@@ -286,13 +329,47 @@ export default defineComponent({
       }
 
       console.log(imagePreview.value);
+      selectedBookCover.value = e.target.files[0];
       nameImage.value = e.target.files[0].name;
     };
 
     const drophandleImage = (e) => {
       e.preventDefault();
       console.log(e.dataTransfer.files);
+      selectedBookCover.value = e.dataTransfer.files[0];
       nameImage.value = e.dataTransfer.files[0].name;
+    };
+
+    const addBookStart = async () => {
+      let data = {
+        Judul: judulBookInput.value,
+        Penulis: penulisBookInput.value,
+        Penerbit: penerbitBookInput.value,
+        Sinopsis: sinopsisBookInput.value,
+        TahunTerbit: tahunTerbitBookInput.value,
+        Jumlah: parseInt(jumlahBookInput.value),
+      };
+      if (judulBookInput.value != "" && parseInt(jumlahBookInput.value) != 0) {
+        await store.dispatch("Books/addBook", data).then(async (res) => {
+          if (res.status == 200) {
+            console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
+            toast.success("Berhasil Menambah Buku");
+            judulBookInput.value = "";
+            penulisBookInput.value = "";
+            penerbitBookInput.value = "";
+            sinopsisBookInput.value = "";
+            tahunTerbitBookInput.value = "";
+            jumlahBookInput.value = "";
+            if (selectedBookCover.value != null) {
+              let dataBook = {
+                idBook: res.data[1].data[0].BukuID,
+                file: selectedBookCover.value,
+              };
+              await store.dispatch("Books/addOrUpdateCover", dataBook);
+            }
+          }
+        });
+      }
     };
 
     onMounted(async () => {
@@ -306,6 +383,7 @@ export default defineComponent({
         }
       });
     });
+
     return {
       role,
       inputFileCsv,
@@ -323,6 +401,14 @@ export default defineComponent({
       openExploreImage,
       imagePreview,
       nameImage,
+      uploadFileCSV,
+      addBookStart,
+      judulBookInput,
+      penulisBookInput,
+      penerbitBookInput,
+      sinopsisBookInput,
+      tahunTerbitBookInput,
+      jumlahBookInput,
     };
   },
 });

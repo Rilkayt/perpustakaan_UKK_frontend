@@ -45,7 +45,10 @@
           />
         </a>
         <div class="ps-4">
-          <a href="" class="flex gap-3 mt-5 text-[14px]">
+          <a
+            href="/daftar-pinjam/belum-diambil"
+            class="flex gap-3 mt-5 text-[14px]"
+          >
             <font-awesome-icon
               :icon="['fas', 'circle-minus']"
               size="xl"
@@ -55,7 +58,10 @@
               Belum Diambil
             </p>
           </a>
-          <a href="" class="flex gap-3 mt-5 text-[14px]">
+          <a
+            href="/daftar-pinjam/belum-dikembalikan"
+            class="flex gap-3 mt-5 text-[14px]"
+          >
             <font-awesome-icon
               :icon="['fas', 'clock']"
               size="xl"

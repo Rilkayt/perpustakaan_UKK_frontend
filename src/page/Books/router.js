@@ -25,7 +25,7 @@ const routes = [
         },
       },
       {
-        path: "detail-buku",
+        path: "detail-buku/:idBuku",
         component: detailBook,
         name: "detailBook",
         meta: {

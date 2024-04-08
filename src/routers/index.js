@@ -6,12 +6,18 @@ import { jwtDecode } from "jwt-decode";
 import Auth from "../page/Auth";
 import Dashboard from "../page/Dashboard";
 import Books from "../page/Books";
+import Borrow from "../page/Borrow";
 
 const routes = [
   {
     path: "",
     component: App,
-    children: [...Auth.router, ...Dashboard.router, ...Books.router],
+    children: [
+      ...Auth.router,
+      ...Dashboard.router,
+      ...Books.router,
+      ...Borrow.router,
+    ],
   },
 ];
 

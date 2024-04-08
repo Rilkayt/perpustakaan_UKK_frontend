@@ -100,7 +100,9 @@
                   <td
                     class="font-gunjarati text-sm p-2 font-semibold whitespace-nowrap"
                   >
-                    320/500
+                    {{ bookRandomList.Jumlah }}/{{
+                      bookRandomList.Jumlah + bookRandomList.bukuSedangDipinjam
+                    }}
                   </td>
                   <td class="whitespace-nowrap rounded-tr-lg rounded-br-lg">
                     <div class="flex gap-0 justify-center p-2">
@@ -117,6 +119,7 @@
                       </button>
                       <button
                         class="p-1 text-sm font-gunjarati border-2 border-[#1859D4] rounded-tr-lg rounded-br-lg px-5 font-bold hover:bg-[#1859D4] hover:text-white hover:duration-300"
+                        @click="seeDetail(bookRandomList.BukuID)"
                       >
                         Ubah
                       </button>
@@ -130,7 +133,10 @@
       </template>
     </template>
     <template v-slot:footer>
-      <button class="bg-[#E8C13C] py-2 px-4 w-28 rounded-2xl m-3">
+      <button
+        class="bg-[#E8C13C] py-2 px-4 w-28 rounded-2xl m-3"
+        @click="goToAdd"
+      >
         <font-awesome-icon :icon="['fas', 'plus']" />
         Tambah
       </button>
@@ -169,6 +175,7 @@ import { defineComponent, ref, onMounted } from "vue";
 import basePage from "../../../components/basePageTemp.vue";
 import cardBook from "../components/cardBook.vue";
 import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 import { jwtDecode } from "jwt-decode";
 import baseModal from "../../../components/baseModal.vue";
 import { useToast } from "vue-toastification";
@@ -183,6 +190,7 @@ export default defineComponent({
     // loadData,
   },
   setup() {
+    const router = useRouter();
     const store = useStore();
 
     let role = ref("");
@@ -233,11 +241,20 @@ export default defineComponent({
       role.value = dataUserReady.Tipe;
 
       await store.dispatch("Books/getListBook").then((res) => {
+        console.log(res);
         if (res.status == 200) {
           bookList.value = bookList.value.concat(res.data[1].data.daftarBuku);
         }
       });
     });
+
+    const seeDetail = (idBook) => {
+      router.push({ name: "detailBook", params: { idBuku: idBook } });
+    };
+
+    const goToAdd = () => {
+      router.push({ name: "addBook" });
+    };
 
     return {
       role,
@@ -249,6 +266,8 @@ export default defineComponent({
       uuidBookSelected,
       nameBook,
       deleteData,
+      seeDetail,
+      goToAdd,
     };
   },
 });
