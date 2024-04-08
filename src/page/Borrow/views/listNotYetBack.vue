@@ -124,7 +124,8 @@
         <template v-slot:content>
           <div>
             <p class="font-gunjarati text-justify py-3">
-              Buku <span class="font-semibold">{{ buku }}</span> Sudah Diambil ?
+              Buku <span class="font-semibold">{{ buku }}</span> Sudah
+              Dikembalikan ?
               <span class="text-[#3e50b7d8] font-semibold">{{ nameBook }}</span>
             </p>
             <div class="w-full pb-3">
@@ -209,7 +210,7 @@ export default defineComponent({
           closeModal();
           listData.value = [];
           let data = {
-            tipe: 1,
+            tipe: 2,
             skip: skip.value,
             take: take,
           };
