@@ -1,6 +1,7 @@
 import indexView from "./index.vue";
 import listNotYet from "./views/listNotYet.vue";
 import listNotYetBack from "./views/listNotYetBack.vue";
+import listDoneBack from "./views/listDoneBack.vue";
 
 const routes = [
   {
@@ -19,6 +20,14 @@ const routes = [
         path: "belum-dikembalikan",
         component: listNotYetBack,
         name: "listNotYetBack",
+        meta: {
+          requiredAuth: true,
+        },
+      },
+      {
+        path: "sudah-dikembalikan",
+        component: listDoneBack,
+        name: "listDoneBack",
         meta: {
           requiredAuth: true,
         },

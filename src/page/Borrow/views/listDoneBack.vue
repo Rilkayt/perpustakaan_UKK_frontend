@@ -1,7 +1,7 @@
 <template>
-  <basePage :titleName="'Belum Dikembalikan'" :footerRight="true">
+  <basePage :titleName="'Sudah Diambil'" :footerRight="true">
     <template v-slot:content>
-      <div class="mt-2" style="display: flex; justify-content: flex-end">
+      <div class="mt1-1" style="display: flex; justify-content: flex-end">
         <div class="border border-[#7B7B7B] rounded-lg m-5 w-[max-content]">
           <input
             type="text"
@@ -16,24 +16,26 @@
       <div
         class="mobile:overflow-auto desktop:overflow-hidden shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] p-2"
       >
-        <table class="w-full mx-1">
+        <table class="w-full mx-1 mt-">
           <thead class="bg-[#40475A] border-b-[10px]">
-            <tr class="text-white text-start">
+            <tr class="text-white text-center">
               <th
-                class="w-3 p-3 font-gunjarati font-semibold rounded-tl-2xl text-sm"
+                class="w-3 px-4 font-gunjarati font-semibold rounded-tl-2xl tracking-wide text-sm"
               >
                 No
               </th>
-              <th class="p-3 font-gunjarati font-semibold text-start text-sm">
+              <th
+                class="w-3 p-2 font-gunjarati font-semibold text-start tracking-wide text-sm"
+              >
                 Buku
               </th>
-              <th class="w-3 p-3 font-gunjarati font-semibold text-sm">
+              <th class="w-3 p-3 font-gunjarati font-semibold ext-sm">
                 Pengguna
               </th>
-              <th class="w-3 p-3 font-gunjarati font-semibold text-sm">
+              <th class="w-3 p-2 font-gunjarati font-semibold text-sm">
                 Jumlah
               </th>
-              <th class="w-3 p-3 font-gunjarati font-semibold text-sm">
+              <th class="w-3 p-2 font-gunjarati font-semibold text-sm">
                 Pengembalian
               </th>
               <th
@@ -43,10 +45,10 @@
               </th>
             </tr>
           </thead>
-          <tbody class="text-start">
+          <tbody class="text-center">
             <tr class="border-b-[10px]" v-if="listData.length < 1">
-              <td class="font-gunjarati text-center p-5" colspan="6">
-                Belum ada yang pinjam
+              <td class="font-gunjarati text-center p-5" colspan="5">
+                Buku di perpustakaan ini belum tersedia
               </td>
             </tr>
 
@@ -67,17 +69,17 @@
                 </td>
 
                 <td
-                  class="font-gunjarati text-sm p-3 font-semibold whitespace-nowrap"
+                  class="font-gunjarati text-sm p-2 font-semibold text-start whitespace-nowrap"
                 >
                   {{ listBorrowAll.buku[0].Judul }}
                 </td>
                 <td
-                  class="font-gunjarati text-center text-sm p-2 font-semibold whitespace-nowrap"
+                  class="font-gunjarati text-sm p-2 font-semibold whitespace-nowrap text-[#4a4848]"
                 >
                   {{ listBorrowAll.user.Username }}
                 </td>
                 <td
-                  class="font-gunjarati text-center text-sm p-2 font-semibold whitespace-nowrap"
+                  class="font-gunjarati text-sm p-2 font-semibold whitespace-nowrap"
                 >
                   {{ listBorrowAll.dataPinjam.jumlah }}
                 </td>
@@ -91,23 +93,24 @@
                   }}
                 </td>
                 <td class="whitespace-nowrap rounded-tr-lg rounded-br-lg">
-                  <div class="flex gap-0 justify-center p-2">
+                  <div class="flex gap-1 justify-center p-2">
                     <button
-                      class="p-1 text-sm font-gunjarati border-[1px] border-[#05B016] rounded-tl-lg rounded-bl-lg px-4 font-bold hover:bg-[#05B016] hover:text-white hover:duration-300"
-                      @click="openCall(listBorrowAll.user.NoTelp)"
-                    >
-                      Hubungi
-                    </button>
-                    <button
-                      class="p-1 text-sm font-gunjarati border-[1px] border-[#1859D4] rounded-tr-lg rounded-br-lg px-5 font-bold hover:bg-[#1859D4] hover:text-white hover:duration-300"
+                      class="p-1 text-sm font-gunjarati border-[1px] border-[#1859D4] rounded-tl-lg rounded-bl-lg px-4 font-bold hover:bg-[#1859D4] hover:text-white hover:duration-300"
                       @click="
                         openModal(
                           listBorrowAll.dataPinjam.idPeminjaman,
-                          listBorrowAll.buku[0].Judul
+                          listBorrowAll.buku[0].Judul,
+                          listBorrowAll.user.Username
                         )
                       "
                     >
-                      Dikembalikan
+                      Ubah
+                    </button>
+                    <button
+                      class="p-1 text-sm font-gunjarati border-[1px] border-[#05B016] rounded-tr-lg rounded-br-lg px-5 font-bold hover:bg-[#05B016] hover:text-white hover:duration-300"
+                      @click="openTelp(listBorrowAll.user.NoTelp)"
+                    >
+                      Hubungi
                     </button>
                   </div>
                 </td>
@@ -117,23 +120,32 @@
         </table>
       </div>
     </template>
-
-    <template v-slot:footer> </template>
     <template v-slot:modal>
       <baseModal :title="'Diambil'" :actived="checkModal" @close="closeModal">
         <template v-slot:content>
           <div>
             <p class="font-gunjarati text-justify py-3">
-              Buku <span class="font-semibold">{{ buku }}</span> Sudah
-              Dikembalikan ?
+              Peminjaman Buku <span class="font-semibold">{{ buku }}</span> oleh
+              <span class="font-semibold">{{ username }}</span>
+              , ingin diubah ?
               <span class="text-[#3e50b7d8] font-semibold">{{ nameBook }}</span>
             </p>
+            <select
+              name=""
+              id=""
+              class="w-full mb-6 p-3 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a]"
+              v-model="statusCode"
+            >
+              <option value="1">Belum Diambil</option>
+              <option value="2">Belum Dikembalikan</option>
+              <option value="3">Sudah Dikembalikan</option>
+            </select>
             <div class="w-full pb-3">
               <button
                 class="bg-[#1859D4] w-full rounded-md font-gunjarati text-white font-semibold items-center flex justify-center py-2"
-                @click="changeThree"
+                @click="changeStatusCode"
               >
-                Sudah
+                Ubah
               </button>
             </div>
           </div>
@@ -144,8 +156,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted } from "vue";
 import basePage from "../../../components/basePageTemp.vue";
+import { ref, onMounted } from "vue";
 import cardBook from "../components/cardBook.vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
@@ -155,13 +167,11 @@ import { useToast } from "vue-toastification";
 import moment from "moment";
 // import loadData from "../../../components/loadData.vue";
 
-export default defineComponent({
-  name: "listNotYetBack",
+export default {
+  name: "listDoneBack",
   components: {
     basePage,
-    cardBook,
     baseModal,
-    // loadData,
   },
   setup() {
     const router = useRouter();
@@ -178,13 +188,14 @@ export default defineComponent({
 
     onMounted(async () => {
       let data = {
-        tipe: 2,
+        tipe: 3,
         skip: skip.value,
         take: take,
       };
       await store.dispatch("Borrow/getListPinjam", data).then((res) => {
         console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
         listData.value = listData.value.concat(res.data[1].data.daftarPinjam);
+        statusCode.value = 3;
       });
     });
 
@@ -192,16 +203,16 @@ export default defineComponent({
       return moment(tanggalPengembalian).format("DD MMMM YYYY");
     };
 
-    const openCall = (noTelp) =>
-      window.open("https://wa.me/" + noTelp, "_blank");
-
+    const openCall = (noTelp) => {
+      window.location.href = "http://wa.me/" + noTelp;
+    };
     const idPinjaman = ref("");
     const buku = ref("");
 
-    const changeThree = async () => {
+    const changeStatusCode = async () => {
       let data = {
         idPinjam: idPinjaman.value,
-        tipe: 3,
+        tipe: parseInt(statusCode.value),
       };
       await store.dispatch("Borrow/changeStatus", data).then(async (res) => {
         if (res.status == 200) {
@@ -210,7 +221,7 @@ export default defineComponent({
           closeModal();
           listData.value = [];
           let data = {
-            tipe: 2,
+            tipe: 3,
             skip: skip.value,
             take: take,
           };
@@ -225,16 +236,24 @@ export default defineComponent({
     };
 
     const checkModal = ref(false);
-    const openModal = (idPinjam, bukuPinjam) => {
+    const username = ref("");
+    const openModal = (idPinjam, bukuPinjam, user) => {
       checkModal.value = !checkModal.value;
       console.log(checkModal.value);
       idPinjaman.value = idPinjam;
       buku.value = bukuPinjam;
+      username.value = user;
     };
     const closeModal = () => {
       checkModal.value = !checkModal.value;
       console.log(checkModal.value);
+      statusCode.value = 3;
     };
+
+    const statusCode = ref("");
+
+    const openTelp = (noTelp) =>
+      window.open("https://wa.me/" + noTelp, "_blank");
 
     return {
       role,
@@ -244,12 +263,15 @@ export default defineComponent({
       openModal,
       closeModal,
       idPinjaman,
-      changeThree,
+      changeStatusCode,
       checkModal,
       buku,
       momentTanggalPengembalian,
       openCall,
+      statusCode,
+      username,
+      openTelp,
     };
   },
-});
+};
 </script>

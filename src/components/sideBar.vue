@@ -71,7 +71,10 @@
               Belum Dikembalikan
             </p>
           </a>
-          <a href="" class="flex gap-3 mt-5 text-[14px]">
+          <a
+            href="/daftar-pinjam/sudah-dikembalikan"
+            class="flex gap-3 mt-5 text-[14px]"
+          >
             <font-awesome-icon
               :icon="['fas', 'circle-check']"
               size="xl"
