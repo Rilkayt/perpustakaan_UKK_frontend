@@ -2,6 +2,7 @@ import indexView from "./index.vue";
 import listNotYet from "./views/listNotYet.vue";
 import listNotYetBack from "./views/listNotYetBack.vue";
 import listDoneBack from "./views/listDoneBack.vue";
+import listBorrowInUser from "./views/listBorrowInUser.vue";
 
 const routes = [
   {
@@ -33,6 +34,14 @@ const routes = [
         },
       },
     ],
+  },
+  {
+    path: "/peminjaman",
+    component: listBorrowInUser,
+    name: "listBorrowInUser",
+    meta: {
+      requiredAuth: true,
+    },
   },
 ];
 

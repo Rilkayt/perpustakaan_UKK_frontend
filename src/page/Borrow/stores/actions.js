@@ -25,6 +25,16 @@ const actions = {
         return err;
       });
   },
+  getListRiwayatPinjam: async ({ commit }, data) => {
+    return api
+      .get(`/borrow/user-list?take=${data.take}&skip=${data.skip}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

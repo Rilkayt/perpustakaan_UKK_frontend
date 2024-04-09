@@ -85,7 +85,7 @@
             </p>
           </a>
         </div>
-        <a href="" class="flex gap-3 mt-5">
+        <a href="/kategori" class="flex gap-3 mt-5">
           <font-awesome-icon
             :icon="['fas', 'list']"
             size="xl"

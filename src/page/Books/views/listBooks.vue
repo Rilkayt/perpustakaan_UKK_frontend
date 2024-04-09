@@ -1,7 +1,7 @@
 <template>
   <basePage :titleName="'Buku'" :footerRight="true">
     <template v-slot:content>
-      <div class="mt-7" style="display: flex; justify-content: flex-end">
+      <div class="mt-3" style="display: flex; justify-content: flex-end">
         <div class="border border-[#7B7B7B] rounded-lg m-5 w-[max-content]">
           <input
             type="text"
@@ -31,6 +31,7 @@
                 :cover="bookRandomList.Gambar"
                 :penulis="bookRandomList.Penulis"
                 :title="bookRandomList.Judul"
+                :idBook="bookRandomList.BukuID"
               />
             </template>
           </div>
@@ -132,7 +133,7 @@
         </div>
       </template>
     </template>
-    <template v-slot:footer>
+    <template v-slot:footer v-if="role === 'ADMIN' || role === 'EMPLOYEE'">
       <button
         class="bg-[#E8C13C] py-2 px-4 w-28 rounded-2xl m-3"
         @click="goToAdd"

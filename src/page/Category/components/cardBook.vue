@@ -3,19 +3,15 @@
     class="bg-[#EDECEC] p-4 shadow-[0px_5px_8px_1px_rgba(0,0,0,0.3)] w-full rounded-xl flex flex-col justify-between"
   >
     <div class="flex flex-col justify-between h-full">
-      <div class="flex justify-center">
-        <div
-          class="flex items-center mobile:h-[80px] tablet:h-[20rem] w-full justify-center"
-        >
-          <img
-            :src="`../../../..${cover}`"
-            alt="gambar"
-            class="h-full w-full object-cover rounded-lg"
-          />
-        </div>
+      <div class="flex justify-center items-center">
+        <img
+          :src="`../../../..${cover}`"
+          alt="gambar"
+          class="tablet:w-24 laptop:w-30 rounded-md"
+        />
       </div>
-      <div class="flex flex-col w-full h-full">
-        <div class="flex justify-between py-3">
+      <div class="flex flex-col">
+        <div class="flex justify-between py-2">
           <p class="font-gunjaranti font-semibold text-black text-[0.3cm]">
             {{ penulis }}
           </p>
@@ -24,16 +20,13 @@
             <font-awesome-icon :icon="['fas', 'star']" size="sm" />
           </p>
         </div>
-        <div>
-          <p class="font-gunjaranti font-semibold">
-            {{ title }}
-          </p>
-        </div>
+        <p class="font-gunjaranti font-semibold">
+          {{ title }}
+        </p>
       </div>
       <div class="flex pt-3 gap-3">
         <button
           class="w-20 bg-[#d9d9d9c8] p-3 rounded-xl shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)]"
-          @click="detailBook"
         >
           <font-awesome-icon
             :icon="['fas', 'file']"
@@ -52,30 +45,12 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
-import { useRouter } from "vue-router";
-export default defineComponent({
+export default {
   name: "cardBook",
   props: {
     cover: "",
     penulis: "",
     title: "",
-    idBook: "",
   },
-  setup(props, { emit }) {
-    const router = useRouter();
-
-    onMounted(() => {
-      window.scrollTo(0, 0);
-    });
-
-    const detailBook = () => {
-      router.push({ name: "detailBook", params: { idBuku: props.idBook } });
-    };
-
-    return {
-      detailBook,
-    };
-  },
-});
+};
 </script>

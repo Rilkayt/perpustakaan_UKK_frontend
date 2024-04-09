@@ -7,6 +7,7 @@ import Auth from "../page/Auth";
 import Dashboard from "../page/Dashboard";
 import Books from "../page/Books";
 import Borrow from "../page/Borrow";
+import Category from "../page/Category";
 
 const routes = [
   {
@@ -17,6 +18,7 @@ const routes = [
       ...Dashboard.router,
       ...Books.router,
       ...Borrow.router,
+      ...Category.router,
     ],
   },
 ];

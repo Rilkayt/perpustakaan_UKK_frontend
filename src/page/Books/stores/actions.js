@@ -106,6 +106,26 @@ const actions = {
         return err;
       });
   },
+  addCollection: async ({ commit }, idBook) => {
+    return await api
+      .post(`/collection/add-collection/${idBook}`, {}, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  deleteCollection: async ({ commit }, idBook) => {
+    return await api
+      .del(`/collection/delete-collection/${idBook}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

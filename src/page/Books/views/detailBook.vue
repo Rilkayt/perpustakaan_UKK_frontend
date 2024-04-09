@@ -21,6 +21,21 @@
             >
               Ubah Gambar
             </button>
+            <button
+              class="font-gunjarati p-2 border-2 border-[#7B7B7B] hover:bg-[#7B7B7B] hover:duration-300 hover:text-white rounded-lg font-semibold mt-3 mb-3 w-full shadow-[1px_5px_4px_0px_rgba(0,0,0,0.3)]"
+              @click="
+                dataBook.koleksiUser != null
+                  ? deleteCollection()
+                  : addCollection()
+              "
+              v-if="role == 'USER'"
+            >
+              {{
+                dataBook.koleksiUser != null
+                  ? "Hapus Koleksi"
+                  : "Tambah Koleksi"
+              }}
+            </button>
           </div>
           <div class="p-3 col-span-2">
             <div
@@ -89,11 +104,23 @@
             </div>
           </div>
           <div class="p-3 mobile:col-span-2 laptop:col-span-1">
+            <template
+              v-if="
+                dataBook.telahDiPinjamUser > 0 && dataBook.ulasanUser == null
+              "
+            >
+              <button
+                class="hover:bg-[#3c839ab1] hover:text-[#f3e9e9eb] hover:duration-300 border-[1px] border-[#3c839ab1] px-2 py-1 font-gunjarati w-full rounded-md mb-2 text-black font-semibold"
+                @click="openModalUlasan"
+              >
+                Tambah Ulasan
+              </button>
+            </template>
             <div
               class="border border-[#7B7B7B] rounded-[1rem] desktop:w-full h-[max-content] p-4"
             >
               <p class="text-center font-bold">
-                {{ dataBook.rating }}/5
+                {{ dataBook.rating === null ? 0 : dataBook.rating }}/5
                 <font-awesome-icon
                   :icon="['fas', 'star']"
                   style="color: #e8c13c"
@@ -101,36 +128,43 @@
               </p>
 
               <p class="font-gunjarati font-bold pt-2">Ulasan</p>
-              <template v-for="ulasanAll in dataBook.ulasan">
-                <div
-                  class="pt-2 flex gap-2 break-words"
-                  style="overflow-wrap: break-word"
-                >
-                  <img
-                    :src="`../../../.${ulasanAll.userUlasan.ProfilAkun}`"
-                    alt=""
-                    class="rounded-full"
-                    style="max-height: 20px; max-width: 20px"
-                  />
-                  <div>
-                    <div class="flex gap-2">
-                      <p class="font-gunjarati text-xs font-semibold">
-                        {{ ulasanAll.userUlasan.Username }}
-                      </p>
-                      <p class="font-bold text-xs font-gunjarati">
-                        {{ ulasanAll.ulasan.rating }}
-                        <font-awesome-icon
-                          :icon="['fas', 'star']"
-                          style="color: #e8c13c"
-                        />
+              <template v-if="dataBook.ulasan.length < 1">
+                <p class="font-gunjarati text-sm text-center mt-2">
+                  Belum Ada Ulasan
+                </p>
+              </template>
+              <div>
+                <template v-for="ulasanAll in dataBook.ulasan">
+                  <div
+                    class="pt-2 flex gap-2 break-words"
+                    style="overflow-wrap: break-word"
+                  >
+                    <img
+                      :src="`../../../.${ulasanAll.userUlasan.ProfilAkun}`"
+                      alt=""
+                      class="rounded-full"
+                      style="max-height: 20px; max-width: 20px"
+                    />
+                    <div>
+                      <div class="flex gap-2">
+                        <p class="font-gunjarati text-xs font-semibold">
+                          {{ ulasanAll.userUlasan.Username }}
+                        </p>
+                        <p class="font-bold text-xs font-gunjarati">
+                          {{ ulasanAll.ulasan.rating }}
+                          <font-awesome-icon
+                            :icon="['fas', 'star']"
+                            style="color: #e8c13c"
+                          />
+                        </p>
+                      </div>
+                      <p class="font-gunjarati text-sm">
+                        {{ ulasanAll.ulasan.pesan }}
                       </p>
                     </div>
-                    <p class="font-gunjarati text-sm">
-                      {{ ulasanAll.ulasan.pesan }}
-                    </p>
                   </div>
-                </div>
-              </template>
+                </template>
+              </div>
             </div>
           </div>
         </div>
@@ -331,6 +365,30 @@
           </div>
         </template>
       </baseModal>
+      <baseModal
+        :id="'modalAddUlasan'"
+        :title="'Berikan Ulasan'"
+        :actived="checkModalUlasan"
+        @close="closeModalUlasan"
+      >
+        <template v-slot:content>
+          <div class="w-full mb-3">
+            <textarea
+              type="text"
+              name=""
+              id=""
+              v-model="inputPesanUlasan"
+              class="w-full mb-6 p-2 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a]"
+            ></textarea>
+            <button
+              class="w-full border-[1px] border-[#1859D4] py-2 rounded-md font-gunjarati font-semibold hover:bg-[#1859D4] hover:text-white hover:duration-300"
+              @click="startUpdateData"
+            >
+              Simpan
+            </button>
+          </div>
+        </template>
+      </baseModal>
     </template>
   </basePage>
 </template>
@@ -391,9 +449,11 @@ export default defineComponent({
     let dataBook = ref(null);
     const role = ref("");
     onMounted(async () => {
+      window.scrollTo(0, 0);
       let dataUser = JSON.parse(localStorage.getItem("token"));
       let dataUserReady = jwtDecode(dataUser.token);
       role.value = dataUserReady.Tipe;
+      console.log("🚀 ~ onMounted ~ role.value:", role.value);
 
       await store
         .dispatch("Books/getBookById", route.params.idBuku)
@@ -565,6 +625,54 @@ export default defineComponent({
       }
     };
 
+    const addCollection = async () => {
+      await store
+        .dispatch("Books/addCollection", route.params.idBuku)
+        .then(async (res) => {
+          if (res.status === 200) {
+            toast.success(res.data[0].message);
+            dataBook.value = null;
+            await store
+              .dispatch("Books/getBookById", route.params.idBuku)
+              .then((res) => {
+                console.log(res);
+                if (res.status === 200) {
+                  dataBook.value = res.data[1].data;
+                  console.log(dataBook.value);
+                }
+              });
+          }
+        });
+    };
+
+    const deleteCollection = async () => {
+      await store
+        .dispatch("Books/deleteCollection", route.params.idBuku)
+        .then(async (res) => {
+          if (res.status === 200) {
+            toast.success(res.data[0].message);
+            dataBook.value = null;
+            await store
+              .dispatch("Books/getBookById", route.params.idBuku)
+              .then((res) => {
+                console.log(res);
+                if (res.status === 200) {
+                  dataBook.value = res.data[1].data;
+                  console.log(dataBook.value);
+                }
+              });
+          }
+        });
+    };
+
+    const checkModalUlasan = ref(false);
+    const openModalUlasan = () => {
+      checkModalUlasan.value = !checkModalUlasan.value;
+    };
+    const closeModalUlasan = () => {
+      checkModalUlasan.value = !checkModalUlasan.value;
+    };
+
     return {
       role,
       openModal,
@@ -592,6 +700,11 @@ export default defineComponent({
       addJumlah,
       removeJumlah,
       startBorrow,
+      addCollection,
+      deleteCollection,
+      checkModalUlasan,
+      openModalUlasan,
+      closeModalUlasan,
     };
   },
 });

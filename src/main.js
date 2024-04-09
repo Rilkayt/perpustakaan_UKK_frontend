@@ -73,11 +73,15 @@ import "vue-toastification/dist/index.css";
 import VCalendar from "v-calendar";
 import "v-calendar/style.css";
 
+import rate from "vue-rate";
+import "vue-rate/dist/vue-rate.css";
+
 const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(Toast, { POSITION: POSITION.TOP_RIGHT, timeout: 3000 });
 app.use(moment);
 app.use(VCalendar, {});
+app.use(rate);
 app.component("font-awesome-icon", FontAwesomeIcon);
 app.mount("#app");

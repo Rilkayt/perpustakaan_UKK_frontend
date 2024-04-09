@@ -5,6 +5,7 @@ import Auth from "../page/Auth";
 import Dashboard from "../page/Dashboard";
 import Books from "../page/Books";
 import Borrow from "../page/Borrow";
+import Category from "../page/Category";
 
 const store = createStore({
   modules: {
@@ -12,6 +13,7 @@ const store = createStore({
     Dashboard: Dashboard.stores,
     Books: Books.stores,
     Borrow: Borrow.stores,
+    Category: Category.stores,
   },
 });
 
