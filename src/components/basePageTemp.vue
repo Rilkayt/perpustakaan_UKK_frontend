@@ -16,18 +16,50 @@
           >
             {{ titleName }}
           </p>
-          <div class="flex items-center gap-2">
-            <img
-              :src="imageUser"
-              class="rounded-full"
-              alt="imageProfil"
-              width="30"
-              height="30"
-            />
+          <div>
+            <div
+              class="flex items-center gap-2 p-2 hover:bg-[#cccdd1] hover:rounded-md hover:duration-300 duration-300"
+              @click="dropDownClicked"
+            >
+              <div class="w-6 h-6">
+                <img
+                  :src="`../..${imageUser}`"
+                  class="rounded-full w-full h-full"
+                  alt="imageProfil"
+                />
+              </div>
 
-            <p class="font-gunjarati text-[14px] text-black font-normal">
-              {{ username }}
-            </p>
+              <p
+                class="font-gunjarati text-[14px] text-black font-normal pt-[0.2px]"
+              >
+                {{ username }}
+              </p>
+            </div>
+            <div
+              :class="`absolute bg-[#E7E9EE] p-2 rounded-lg border-[1px] border-[#706f6f] w-64 right-0 m-2 shadow-[0px_7px_5px_1px_rgba(0,0,0,0.3)] ${
+                checkDropDown
+                  ? 'opacity-100  duration-500 z-50'
+                  : 'opacity-0  duration-500 -z-50'
+              }`"
+            >
+              <div>
+                <div
+                  class="font-gunjarati px-2 py-2 hover:bg-[#cccdd1] hover:rounded-md hover:duration-300 flex justify-between"
+                  @click="checkDropDown ? goToAccount() : ''"
+                >
+                  Akun
+                  <font-awesome-icon
+                    :icon="['fas', 'arrow-up-right-from-square']"
+                  />
+                </div>
+                <div
+                  class="font-gunjarati px-2 py-2 hover:bg-[#cccdd1] hover:rounded-md hover:duration-300"
+                  @click="checkDropDown ? logOut() : ''"
+                >
+                  Keluar
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -85,6 +117,7 @@ export default {
         conditionBar.value = true;
       }
     };
+
     onMounted(() => {
       if (window.innerWidth < 768) {
         conditionButtonSideBar.value = true;
@@ -97,11 +130,24 @@ export default {
       // let dataUserImageReady = dataUserImage.replace(/^\.+/, "");
       // console.log(dataUserImageReady);
       imageUser.value = dataUserImage;
+      console.log("🚀 ~ onMounted ~ imageUser:", imageUser.value);
 
       username.value = dataUserReady.Username;
       console.log(window.innerWidth);
     });
 
+    const checkDropDown = ref(false);
+    const dropDownClicked = () => {
+      checkDropDown.value = !checkDropDown.value;
+    };
+
+    const goToAccount = () => {
+      window.location.href = "/akun";
+    };
+    const logOut = () => {
+      localStorage.removeItem("token");
+      window.location.href = "/masuk";
+    };
     return {
       imageUser,
       username,
@@ -109,6 +155,10 @@ export default {
       conditionBar,
       sideBarAction,
       closeSide,
+      checkDropDown,
+      dropDownClicked,
+      goToAccount,
+      logOut,
     };
   },
 };

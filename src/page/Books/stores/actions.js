@@ -126,6 +126,21 @@ const actions = {
         return err;
       });
   },
+  addUlasan: async ({ commit }, data) => {
+    let idBook = data.idBook;
+    let dataUlasan = {
+      pesan: data.message,
+      rating: data.rating,
+    };
+    return await api
+      .post(`/ulasan/add-ulasan/${idBook}/3`, dataUlasan, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

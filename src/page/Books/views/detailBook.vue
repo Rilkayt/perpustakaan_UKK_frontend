@@ -116,6 +116,28 @@
                 Tambah Ulasan
               </button>
             </template>
+            <template
+              v-if="
+                dataBook.telahDiPinjamUser > 0 && dataBook.ulasanUser != null
+              "
+            >
+              <div
+                class="border border-[#7B7B7B] rounded-[1rem] desktop:w-full h-[max-content] p-4 mb-3"
+              >
+                <p class="font-gunjarati font-semibold text-md">
+                  Komentar Anda
+                  <span class="text-sm text-end"
+                    >{{ dataBook.ulasanUser.rating }}
+                    <font-awesome-icon
+                      :icon="['fas', 'star']"
+                      style="color: #e8c13c"
+                  /></span>
+                </p>
+                <p class="font-gunjarati text-sm">
+                  {{ dataBook.ulasanUser.pesan }}
+                </p>
+              </div>
+            </template>
             <div
               class="border border-[#7B7B7B] rounded-[1rem] desktop:w-full h-[max-content] p-4"
             >
@@ -373,18 +395,27 @@
       >
         <template v-slot:content>
           <div class="w-full mb-3">
+            <div class="flex justify-center w-full">
+              <vue3-star-ratings
+                v-model="rating"
+                :numberOfStars="5"
+                :starSize="32"
+              />
+            </div>
             <textarea
               type="text"
               name=""
               id=""
               v-model="inputPesanUlasan"
-              class="w-full mb-6 p-2 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a]"
+              maxlength="500"
+              :placeholder="'Tulis Pesan... [maksimal 500 karakter]'"
+              class="w-full mb-6 p-2 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a] mt-5"
             ></textarea>
             <button
               class="w-full border-[1px] border-[#1859D4] py-2 rounded-md font-gunjarati font-semibold hover:bg-[#1859D4] hover:text-white hover:duration-300"
-              @click="startUpdateData"
+              @click="startPostUlasan"
             >
-              Simpan
+              Kirim
             </button>
           </div>
         </template>
@@ -419,6 +450,9 @@ export default defineComponent({
 
     const jumlah = ref(0);
 
+    const rating = ref(0);
+    const inputPesanUlasan = ref("");
+
     const addJumlah = () => {
       if (jumlah.value < dataBook.value.buku[0].Jumlah) jumlah.value++;
     };
@@ -444,6 +478,8 @@ export default defineComponent({
           selectedDateEnd.value = null;
         }
       }
+
+      rating.value = Math.ceil(rating.value);
     });
 
     let dataBook = ref(null);
@@ -673,6 +709,32 @@ export default defineComponent({
       checkModalUlasan.value = !checkModalUlasan.value;
     };
 
+    const startPostUlasan = async () => {
+      let data = {
+        idBook: route.params.idBuku,
+        message: inputPesanUlasan.value,
+        rating: rating.value,
+      };
+      await store.dispatch("Books/addUlasan", data).then(async (res) => {
+        if (res.status === 200) {
+          toast.success(res.data[0].message);
+          closeModalUlasan();
+
+          toast.success(res.data[0].message);
+          dataBook.value = null;
+          await store
+            .dispatch("Books/getBookById", route.params.idBuku)
+            .then((res) => {
+              console.log(res);
+              if (res.status === 200) {
+                dataBook.value = res.data[1].data;
+                console.log(dataBook.value);
+              }
+            });
+        }
+      });
+    };
+
     return {
       role,
       openModal,
@@ -705,6 +767,9 @@ export default defineComponent({
       checkModalUlasan,
       openModalUlasan,
       closeModalUlasan,
+      rating,
+      inputPesanUlasan,
+      startPostUlasan,
     };
   },
 });

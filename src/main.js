@@ -32,6 +32,8 @@ import {
   faStar,
   faStarOfLife,
   faXmark,
+  faSquareArrowUpRight,
+  faArrowUpRightFromSquare,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -62,7 +64,9 @@ library.add(
   faPenToSquare,
   faCircleMinus,
   faCirclePlus,
-  faCalendarDays
+  faCalendarDays,
+  faSquareArrowUpRight,
+  faArrowUpRightFromSquare
 );
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -76,6 +80,8 @@ import "v-calendar/style.css";
 import rate from "vue-rate";
 import "vue-rate/dist/vue-rate.css";
 
+import vue3StarRatings from "vue3-star-ratings";
+
 const app = createApp(App);
 app.use(router);
 app.use(store);
@@ -84,4 +90,5 @@ app.use(moment);
 app.use(VCalendar, {});
 app.use(rate);
 app.component("font-awesome-icon", FontAwesomeIcon);
+app.component("vue3-star-ratings", vue3StarRatings);
 app.mount("#app");
