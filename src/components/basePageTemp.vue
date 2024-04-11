@@ -38,9 +38,14 @@
             <div
               :class="`absolute bg-[#E7E9EE] p-2 rounded-lg border-[1px] border-[#706f6f] w-64 right-0 m-2 shadow-[0px_7px_5px_1px_rgba(0,0,0,0.3)] ${
                 checkDropDown
-                  ? 'opacity-100  duration-500 z-50'
-                  : 'opacity-0  duration-500 -z-50'
+                  ? `opacity-100 transition-opacity duration-500 ${
+                      !hidden ? 'block' : ''
+                    }`
+                  : `opacity-0 transition-opacity duration-500 ${
+                      hidden ? 'hidden' : ''
+                    }`
               }`"
+              v-show="checkDropDown"
             >
               <div>
                 <div
@@ -80,7 +85,7 @@
 import sideBar from "./sideBar.vue";
 import baseModal from "./baseModal.vue";
 import { jwtDecode } from "jwt-decode";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import BaseModal from "./baseModal.vue";
 
 export default {
@@ -148,6 +153,19 @@ export default {
       localStorage.removeItem("token");
       window.location.href = "/masuk";
     };
+
+    let hidden = ref(false);
+    watchEffect(() => {
+      if (checkDropDown.value) {
+        setTimeout(() => {
+          hidden.value = false;
+        }, 3000);
+      } else {
+        setTimeout(() => {
+          hidden.value = true;
+        }, 3000);
+      }
+    });
     return {
       imageUser,
       username,
@@ -159,6 +177,7 @@ export default {
       dropDownClicked,
       goToAccount,
       logOut,
+      hidden,
     };
   },
 };
