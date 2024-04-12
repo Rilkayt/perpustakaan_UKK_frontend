@@ -2,9 +2,9 @@ import api from "../../../api";
 
 const actions = {
   // CALL API
-  getListBook: async () => {
+  getListBook: async ({ commit }, data) => {
     return await api
-      .get("/get-data/books?skip=0&take=20", true)
+      .get(`/get-data/books?skip=${data.skip}&take=${data.take}`, true)
       .then((res) => {
         return res;
       })

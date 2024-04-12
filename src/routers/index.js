@@ -9,6 +9,7 @@ import Books from "../page/Books";
 import Borrow from "../page/Borrow";
 import Category from "../page/Category";
 import Account from "../page/Account";
+import Report from "../page/Report";
 
 const routes = [
   {
@@ -21,6 +22,7 @@ const routes = [
       ...Borrow.router,
       ...Category.router,
       ...Account.router,
+      ...Report.router,
     ],
   },
 ];

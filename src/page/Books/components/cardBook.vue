@@ -5,7 +5,7 @@
     <div class="flex flex-col justify-between h-full">
       <div class="flex justify-center">
         <div
-          class="flex items-center mobile:h-[80px] tablet:h-[20rem] w-full justify-center"
+          class="flex items-center mobile:h-[max-content] w-full justify-center"
         >
           <img
             :src="`../../../..${cover}`"
@@ -18,10 +18,6 @@
         <div class="flex justify-between py-3">
           <p class="font-gunjaranti font-semibold text-black text-[0.3cm]">
             {{ penulis }}
-          </p>
-          <p class="font-gunjaranti font-semibold text-black text-[0.3cm]">
-            3/5
-            <font-awesome-icon :icon="['fas', 'star']" size="sm" />
           </p>
         </div>
         <div>
@@ -43,6 +39,7 @@
         </button>
         <button
           class="w-full bg-[#e8c03c] font-bold p-3 rounded-xl font-gunjarati shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)]"
+          @click="openModalPinjam"
         >
           Pinjam
         </button>
@@ -65,16 +62,17 @@ export default defineComponent({
   setup(props, { emit }) {
     const router = useRouter();
 
-    onMounted(() => {
-      window.scrollTo(0, 0);
-    });
-
     const detailBook = () => {
       router.push({ name: "detailBook", params: { idBuku: props.idBook } });
     };
 
+    const openModalPinjam = () => {
+      emit("openModal");
+    };
+
     return {
       detailBook,
+      openModalPinjam,
     };
   },
 });

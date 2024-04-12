@@ -15,15 +15,18 @@
           <p class="font-gunjaranti font-semibold text-black text-[0.3cm]">
             {{ penulis }}
           </p>
+          <p class="font-gunjaranti font-semibold text-black text-[0.3cm]">
+            3/5
+            <font-awesome-icon :icon="['fas', 'star']" size="sm" />
+          </p>
         </div>
         <p class="font-gunjaranti font-semibold">
           {{ title }}
         </p>
       </div>
-      <div class="flex pt-3 gap-2">
+      <div class="flex pt-3 gap-3">
         <button
           class="w-20 bg-[#d9d9d9c8] p-3 rounded-xl shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)]"
-          @click="goToDetail"
         >
           <font-awesome-icon
             :icon="['fas', 'file']"
@@ -33,7 +36,6 @@
         </button>
         <button
           class="w-full bg-[#e8c03c] font-bold p-3 rounded-xl font-gunjarati shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)]"
-          @click="openModalPinjam"
         >
           Pinjam
         </button>
@@ -49,20 +51,6 @@ export default {
     cover: "",
     penulis: "",
     title: "",
-    bookId: "",
-  },
-  setup(props, { emit }) {
-    const goToDetail = () => {
-      window.location.href = `/buku/detail-buku/${props.bookId}`;
-    };
-    const openModalPinjam = () => {
-      emit("openModal");
-    };
-
-    return {
-      goToDetail,
-      openModalPinjam,
-    };
   },
 };
 </script>

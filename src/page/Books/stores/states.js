@@ -1,3 +1,5 @@
-const state = {};
+const state = {
+  listBook: [],
+};
 
 export default state;
