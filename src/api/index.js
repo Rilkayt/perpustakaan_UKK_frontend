@@ -8,12 +8,13 @@ const authConfig = () => {
   }
 };
 
-const get = (url, auth = true) => {
+const get = (url, auth = true, resType = false) => {
   return axios.get(import.meta.env.VITE_URL_API + url, {
     headers: {
       Authorization: auth ? authConfig() : null,
       "Content-Type": "application/json",
     },
+    responseType: resType ? "blob" : "",
   });
 };
 

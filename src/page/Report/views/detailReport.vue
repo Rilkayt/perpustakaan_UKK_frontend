@@ -5,12 +5,12 @@
         <p class="font-gunjarati font-semibold text-base">
           Rekap {{ dateParam }}
         </p>
-        <!-- <button
+        <button
           class="hover:bg-[#3aca6a] hover:duration-300 duration-300 px-6 py-1 rounded-md font-gunjarati font-semibold border-[1px] border-[#3aca6a]"
           @click="downloadCsvStart"
         >
           Unduh
-        </button> -->
+        </button>
       </div>
       <div class="w-full pt-2 px-4 duration-300">
         <template v-if="listData.length > 0">
@@ -159,22 +159,30 @@ export default defineComponent({
       });
     });
 
-    // const downloadCsvStart = async () => {
-    //   window.location.href =
-    //     "http://localhost:3000/report/download-csv/2024-04-01/2024-05-01";
-    //   // let data = {
-    //   //   start: route.params.dateStart,
-    //   //   end: route.params.dateEnd,
-    //   // };
-    //   // await store.dispatch("Report/downloadCsv", data).then((res) => {
-    //   //   console.log(res);
-    //   // });
-    // };
+    const downloadCsvStart = async () => {
+      let data = {
+        start: route.params.dateStart,
+        end: route.params.dateEnd,
+      };
+      await store.dispatch("Report/downloadCsv", data).then((res) => {
+        console.log(res.data);
+        const url = window.URL.createObjectURL(new Blob([res.data]));
+        console.log(url);
+        let link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `dataLaporan-${data.start}-${data.end}.zip`
+        );
+        document.body.appendChild(link);
+        link.click();
+      });
+    };
 
     return {
       listData,
       dateParam,
-      // downloadCsvStart,
+      downloadCsvStart,
     };
   },
 });
