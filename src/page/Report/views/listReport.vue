@@ -1,20 +1,8 @@
 <template>
   <basePageTemp :titleName="'Laporan'">
     <template v-slot:content>
-      <div class="mt1-1" style="display: flex; justify-content: flex-end">
-        <div class="border border-[#7B7B7B] rounded-lg m-5 w-[max-content]">
-          <input
-            type="text"
-            name=""
-            id=""
-            class="px-3 bg-transparent rounded-lg outline-none"
-          />
-          <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="pe-3" />
-        </div>
-      </div>
-
       <div
-        class="mobile:overflow-auto desktop:overflow-hidden shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] p-2"
+        class="mobile:overflow-auto desktop:overflow-hidden shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] p-4 mt-7"
       >
         <table class="w-full mx-1 mt-">
           <thead class="bg-[#40475A] border-b-[10px]">

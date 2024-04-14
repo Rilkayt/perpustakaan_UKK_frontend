@@ -161,7 +161,8 @@
         Terdapat Kendala ?
       </p>
       <a
-        href=""
+        href="http://wa.me/6285159722546"
+        target="__blank"
         class="text-white text-base font-gunjarati font-bold tracking-wider"
         >Hubungi Kami</a
       >

@@ -5,6 +5,7 @@ import otpRegister from "./views/otpRegister.vue";
 import forgetPassword from "./views/forgetPassword.vue";
 import otpForgetPassword from "./views/otpForgetPassword.vue";
 import formForgetPassword from "./views/formForgetPassword.vue";
+import welcome from "./views/welcome.vue";
 
 const routes = [
   {
@@ -55,6 +56,20 @@ const routes = [
         path: "form-lupa-kata-sandi",
         component: formForgetPassword,
         name: "formForgetPassword",
+        meta: {
+          requiredAuth: false,
+        },
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: indexView,
+    children: [
+      {
+        path: "selamat-datang",
+        component: welcome,
+        name: "welcome",
         meta: {
           requiredAuth: false,
         },

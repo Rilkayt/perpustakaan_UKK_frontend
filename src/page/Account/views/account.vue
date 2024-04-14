@@ -223,7 +223,7 @@
               v-model="inputUsername"
               maxlength="10"
               :placeholder="'Nama Pengguna'"
-              class="w-full mb-3 p-2 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a] text-sm"
+              class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white w-[100%] tablet:pe-[8%] mobile:pe-[20%] outline-none"
             />
 
             <label
@@ -237,7 +237,7 @@
               id="inputNameFull"
               v-model="inputNameFull"
               :placeholder="'Nama Lengkap'"
-              class="w-full mb-3 p-2 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a] text-sm"
+              class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white w-[100%] tablet:pe-[8%] mobile:pe-[20%] outline-none"
             />
 
             <label
@@ -251,7 +251,7 @@
               id="inputAdress"
               v-model="inputAdress"
               :placeholder="'Alamat'"
-              class="w-full mb-3 p-2 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a] text-sm"
+              class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white w-[100%] tablet:pe-[8%] mobile:pe-[20%] outline-none"
             />
 
             <label
@@ -264,12 +264,12 @@
               name=""
               id="inputSchool"
               v-model="inputSchool"
-              class="w-full mb-3 p-2 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a] text-sm"
+              class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white w-[100%] tablet:pe-[8%] mobile:pe-[20%] outline-none"
               disabled
             />
 
             <button
-              class="w-full border-[1px] border-[#1859D4] py-2 rounded-md font-gunjarati font-semibold hover:bg-[#1859D4] hover:text-white hover:duration-300"
+              class="bg-[#E8C13C] w-[100%] h-[48px] rounded-[6px] font-bold font-gunjarati hover:bg-[#e8c03ce0] mt-4"
               @click="startUpdateData"
               :disabled="buttonLoading"
             >
@@ -314,11 +314,11 @@
               id="inputEmail"
               v-model="inputEmail"
               :placeholder="'Email Anda'"
-              class="border-2 h-[52px] text-[15px] px-3 bg-[#40475A] rounded-[6px] text-white w-full tablet:pe-[8%] mobile:pe-[20%] outline-none mb-3"
+              class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white w-[100%] tablet:pe-[8%] mobile:pe-[20%] outline-none"
             />
 
             <button
-              class="w-full border-[1px] border-[#1859D4] py-2 rounded-md font-gunjarati font-semibold hover:bg-[#1859D4] hover:text-white hover:duration-300"
+              class="bg-[#E8C13C] w-[100%] h-[48px] rounded-[6px] font-bold font-gunjarati hover:bg-[#e8c03ce0] mt-4"
               @click="openModalOtpEmail"
               :disabled="buttonLoading"
             >
@@ -436,7 +436,7 @@
             ></span>
           </p>
           <button
-            class="bg-[#E8C13C] w-[100%] h-[48px] rounded-[6px] font-bold font-gunjarati hover:bg-[#e8c03ce0]"
+            class="bg-[#E8C13C] w-[100%] h-[48px] rounded-[6px] font-bold font-gunjarati hover:bg-[#e8c03ce0] mt-4"
             :disabled="buttonLoading"
           >
             <svg
@@ -481,11 +481,11 @@
               id="inputTelp"
               v-model="inputTelp"
               :placeholder="'contoh 85159....'"
-              class="w-full mb-3 p-2 outline-none appearance-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a] text-sm"
+              class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white w-[100%] tablet:pe-[8%] mobile:pe-[20%] outline-none"
             />
 
             <button
-              class="w-full border-[1px] border-[#1859D4] py-2 rounded-md font-gunjarati font-semibold hover:bg-[#1859D4] hover:text-white hover:duration-300"
+              class="bg-[#E8C13C] w-[100%] h-[48px] rounded-[6px] font-bold font-gunjarati hover:bg-[#e8c03ce0] mt-4"
               @click="startUpdateTelp"
               :disabled="buttonLoading"
             >

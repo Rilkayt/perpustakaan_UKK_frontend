@@ -142,7 +142,8 @@
               type="text"
               name=""
               id=""
-              class="w-full mb-3 p-2 outline-none rounded-lg shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] font-gunjarati bg-[#76a2c63a]"
+              placeholder="nama kategori"
+              class="border-2 h-[52px] text-[15px] px-3 bg-[#40475A] rounded-[6px] text-white w-full tablet:pe-[8%] mobile:pe-[20%] outline-none mb-3"
               v-model="categoryInput"
             />
             <div class="w-full pb-3">

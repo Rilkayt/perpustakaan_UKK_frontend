@@ -253,10 +253,7 @@
         @close="closeModalPinjam"
       >
         <template v-slot:content>
-          <div
-            class="bg-[#DEDDDD] rounded-tr-2xl rounded-tl-2xl"
-            v-if="role === 'USER'"
-          >
+          <div class="rounded-tr-2xl rounded-tl-2xl" v-if="role === 'USER'">
             <p class="font-gunjarati text-sm pt-4 px-3 font-semibold">
               {{ judulBukuSelect }}
             </p>
