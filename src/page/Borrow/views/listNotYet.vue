@@ -17,12 +17,22 @@
               type="text"
               name=""
               id=""
-              class="px-3 bg-transparent rounded-lg outline-none"
+              class="px-2 py-1 bg-transparent rounded-lg outline-none text-sm"
+              v-model="inputSearch"
             />
-            <font-awesome-icon
-              :icon="['fas', 'magnifying-glass']"
-              class="pe-3"
-            />
+            <button @click="!checkButtonSearch ? searchStart() : closeSearch()">
+              <font-awesome-icon
+                v-if="!checkButtonSearch"
+                :icon="['fas', 'magnifying-glass']"
+                class="pe-3"
+              />
+
+              <font-awesome-icon
+                :icon="['fas', 'circle-xmark']"
+                v-if="checkButtonSearch"
+                class="pe-3"
+              />
+            </button>
           </div>
         </div>
 
@@ -384,6 +394,53 @@ export default defineComponent({
       );
     };
 
+    const checkButtonSearch = ref(false);
+    const inputSearch = ref("");
+    const searchStart = async () => {
+      if (inputSearch.value != "") {
+        let data = {
+          kode: 1,
+          input: inputSearch.value,
+        };
+        await store.dispatch("Borrow/searchListPinjam", data).then((res) => {
+          if (res.status == 200) {
+            checkButtonSearch.value = !checkButtonSearch.value;
+            dataDinamic.value = 0;
+            listData.value = [];
+            listData.value = listData.value.concat(
+              res.data[1].data.daftarPinjam
+            );
+          }
+          console.log(res);
+        });
+      } else {
+        toast.error("form tidak boleh kosong");
+      }
+    };
+
+    const closeSearch = async () => {
+      checkButtonSearch.value = !checkButtonSearch.value;
+      isLoading.value = true;
+      inputSearch.value = "";
+      take.value = 20;
+      skip.value = 0;
+      listData.value = [];
+      isLoading.value = true;
+      let data = {
+        tipe: 1,
+        skip: skip.value,
+        take: take.value,
+      };
+      await store.dispatch("Borrow/getListPinjam", data).then((res) => {
+        console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
+        listData.value = listData.value.concat(res.data[1].data.daftarPinjam);
+        dataDinamic.value += res.data[1].data.daftarPinjam.length;
+        skip.value += take.value;
+        isLoading.value = false;
+      });
+      isLoading.value = false;
+    };
+
     return {
       role,
       bookList,
@@ -405,6 +462,10 @@ export default defineComponent({
       takeAgainData,
       isLoading,
       buttonLoading,
+      inputSearch,
+      searchStart,
+      checkButtonSearch,
+      closeSearch,
     };
   },
 });

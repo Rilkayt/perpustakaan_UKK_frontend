@@ -17,12 +17,22 @@
               type="text"
               name=""
               id=""
-              class="px-3 bg-transparent rounded-lg outline-none"
+              class="px-2 py-1 bg-transparent rounded-lg outline-none text-sm"
+              v-model="inputSearch"
             />
-            <font-awesome-icon
-              :icon="['fas', 'magnifying-glass']"
-              class="pe-3"
-            />
+            <button @click="!checkButtonSearch ? searchStart() : closeSearch()">
+              <font-awesome-icon
+                v-if="!checkButtonSearch"
+                :icon="['fas', 'magnifying-glass']"
+                class="pe-3"
+              />
+
+              <font-awesome-icon
+                :icon="['fas', 'circle-xmark']"
+                v-if="checkButtonSearch"
+                class="pe-3"
+              />
+            </button>
           </div>
         </div>
 
@@ -319,6 +329,39 @@ export default {
       });
     };
 
+    const checkButtonSearch = ref(false);
+    const inputSearch = ref("");
+    const searchStart = async () => {
+      if (inputSearch.value != "") {
+        await store
+          .dispatch("Category/searchCategory", inputSearch.value)
+          .then((res) => {
+            if (res.status == 200) {
+              checkButtonSearch.value = !checkButtonSearch.value;
+              listCategory.value = [];
+              listCategory.value = listCategory.value.concat(res.data[1].data);
+            }
+            console.log(res);
+          });
+      } else {
+        toast.error("form tidak boleh kosong");
+      }
+    };
+
+    const closeSearch = async () => {
+      checkButtonSearch.value = !checkButtonSearch.value;
+      isLoading.value = true;
+      inputSearch.value = "";
+      listCategory.value = [];
+
+      isLoading.value = true;
+      await store.dispatch("Category/getCategory").then((res) => {
+        console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
+        listCategory.value = listCategory.value.concat(res.data[1].data);
+      });
+      isLoading.value = false;
+    };
+
     return {
       listCategory,
       checkModal,
@@ -335,6 +378,10 @@ export default {
       toCategory,
       buttonLoading,
       isLoading,
+      inputSearch,
+      searchStart,
+      checkButtonSearch,
+      closeSearch,
     };
   },
 };

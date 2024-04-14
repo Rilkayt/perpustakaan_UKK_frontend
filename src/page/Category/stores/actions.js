@@ -72,6 +72,16 @@ const actions = {
         return err;
       });
   },
+  searchCategory: async ({ commit }, data) => {
+    return await api
+      .get(`/get-data/search/kategori/${data}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

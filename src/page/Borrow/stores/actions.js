@@ -35,6 +35,29 @@ const actions = {
         return err;
       });
   },
+  filterPinjam: async ({ commit }, data) => {
+    return api
+      .get(`/get-data/filter/peminjaman-user/${data}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  searchListPinjam: async ({ commit }, data) => {
+    return api
+      .get(
+        `/get-data/search/peminjaman/${data.kode}?search=${data.input}`,
+        true
+      )
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

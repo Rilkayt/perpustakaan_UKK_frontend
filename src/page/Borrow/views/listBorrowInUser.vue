@@ -11,18 +11,22 @@
         </div>
       </template>
       <template v-if="!isLoading">
-        <div class="mt-1" style="display: flex; justify-content: flex-end">
-          <div class="border border-[#7B7B7B] rounded-lg m-5 w-[max-content]">
-            <input
-              type="text"
-              name=""
-              id=""
-              class="px-3 bg-transparent rounded-lg outline-none"
-            />
-            <font-awesome-icon
-              :icon="['fas', 'magnifying-glass']"
-              class="pe-3"
-            />
+        <div class="mt-1 flex p-3">
+          <div class="flex pt-4 gap-2">
+            <font-awesome-icon :icon="['fas', 'filter']" size="lg" />
+            <select
+              name="filter"
+              id="filter"
+              class="outline-none appearance-none bg-transparent text-base font-gunjarati font-semibold"
+              v-model="filterInput"
+              @change="filterChange"
+            >
+              <option value="">Semua</option>
+              <option value="1">Belum Diambil</option>
+              <option value="2">Belum Dikembalikan</option>
+              <option value="3">Sudah Dikembalikan</option>
+              <option value="4">Dibatalkan</option>
+            </select>
           </div>
         </div>
         <template v-if="listPeminjamanRiwayat.length > 0">
@@ -188,6 +192,48 @@ export default {
       return moment(dateParam).format("DD MMMM YYYY");
     };
 
+    const filterInput = ref("");
+    const filterChange = async () => {
+      console.log(filterInput.value);
+      if (filterInput.value != "") {
+        isLoading.value = true;
+        await store
+          .dispatch("Borrow/filterPinjam", filterInput.value)
+          .then((res) => {
+            if (res.status == 200) {
+              console.log(res);
+              dataDinamic.value = 0;
+              listPeminjamanRiwayat.value = [];
+              listPeminjamanRiwayat.value = listPeminjamanRiwayat.value.concat(
+                res.data[1].data
+              );
+            }
+            console.log(res);
+          });
+        isLoading.value = false;
+      } else {
+        isLoading.value = true;
+        take.value = 20;
+        skip.value = 0;
+        dataDinamic.value = 0;
+        let data = {
+          take: take.value,
+          skip: skip.value,
+        };
+        await store
+          .dispatch("Borrow/getListRiwayatPinjam", data)
+          .then((res) => {
+            console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
+            listPeminjamanRiwayat.value = listPeminjamanRiwayat.value.concat(
+              res.data[1].data
+            );
+            dataDinamic.value += res.data[1].data.length;
+            skip.value += take.value;
+            isLoading.value = false;
+          });
+        isLoading.value = false;
+      }
+    };
     return {
       listPeminjamanRiwayat,
       momentTanggal,
@@ -196,6 +242,8 @@ export default {
       dataDinamic,
       takeAgainData,
       isLoading,
+      filterInput,
+      filterChange,
     };
   },
 };

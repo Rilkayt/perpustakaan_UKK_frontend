@@ -151,6 +151,26 @@ const actions = {
         return err;
       });
   },
+  searchBook: async ({ commit }, data) => {
+    return await api
+      .get(`/get-data/search/buku/${data}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  filterBook: async ({ commit }, data) => {
+    return await api
+      .get(`/get-data/filter/buku/${data}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

@@ -11,18 +11,45 @@
         </div>
       </template>
       <template v-if="!isLoading">
-        <div class="mt-3" style="display: flex; justify-content: flex-end">
-          <div class="border border-[#7B7B7B] rounded-lg m-5 w-[max-content]">
+        <div class="mt-3 flex justify-between p-5">
+          <div class="flex gap-2">
+            <font-awesome-icon :icon="['fas', 'filter']" size="lg" />
+            <select
+              name="filter"
+              id="filter"
+              class="outline-none appearance-none bg-transparent text-base font-gunjarati font-semibold"
+              v-model="categoryInput"
+              @change="categoryChange"
+            >
+              <option value="">Semua</option>
+              <template v-for="listCategoryAll in listCategory">
+                <option :value="listCategoryAll.idKategori">
+                  {{ listCategoryAll.nama }}
+                </option>
+              </template>
+            </select>
+          </div>
+          <div class="border border-[#7B7B7B] rounded-lg w-[max-content]">
             <input
               type="text"
               name=""
               id=""
-              class="px-3 bg-transparent rounded-lg"
+              class="px-2 py-1 bg-transparent rounded-lg outline-none text-sm"
+              v-model="inputSearch"
             />
-            <font-awesome-icon
-              :icon="['fas', 'magnifying-glass']"
-              class="pe-3"
-            />
+            <button @click="!checkButtonSearch ? searchStart() : closeSearch()">
+              <font-awesome-icon
+                v-if="!checkButtonSearch"
+                :icon="['fas', 'magnifying-glass']"
+                class="pe-3"
+              />
+
+              <font-awesome-icon
+                :icon="['fas', 'circle-xmark']"
+                v-if="checkButtonSearch"
+                class="pe-3"
+              />
+            </button>
           </div>
         </div>
         <template v-if="role === 'USER'">
@@ -100,6 +127,16 @@
                 </tr>
               </thead>
               <tbody class="">
+                <tr v-if="bookList.length < 1">
+                  <td colspan="5">
+                    <p
+                      v-if="bookList.length < 1"
+                      class="font-gunjarati text-center p-6"
+                    >
+                      Buku di perpustakaan ini tidak ditemukan
+                    </p>
+                  </td>
+                </tr>
                 <template
                   v-for="(bookRandomList, index) in bookList"
                   :key="index"
@@ -416,6 +453,7 @@ export default defineComponent({
     };
 
     const dataDinamic = ref(0);
+    const listCategory = ref([]);
     onMounted(async () => {
       isLoading.value = true;
       take.value = 20;
@@ -427,6 +465,11 @@ export default defineComponent({
         skip: skip.value,
         take: take.value,
       };
+
+      await store.dispatch("Category/getCategory").then((res) => {
+        console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
+        listCategory.value = listCategory.value.concat(res.data[1].data);
+      });
 
       await store.dispatch("Books/getListBook", data).then((res) => {
         console.log(res);
@@ -558,6 +601,100 @@ export default defineComponent({
       }
     };
 
+    const checkButtonSearch = ref(false);
+    const inputSearch = ref("");
+    const searchStart = async () => {
+      if (inputSearch.value != "") {
+        categoryInput.value = "";
+        await store
+          .dispatch("Books/searchBook", inputSearch.value)
+          .then((res) => {
+            if (res.status == 200) {
+              checkButtonSearch.value = !checkButtonSearch.value;
+              bookList.value = [];
+              bookList.value = bookList.value.concat(
+                res.data[1].data.daftarBuku
+              );
+            }
+            console.log(res);
+          });
+      } else {
+        toast.error("form tidak boleh kosong");
+      }
+    };
+
+    const closeSearch = async () => {
+      checkButtonSearch.value = !checkButtonSearch.value;
+      isLoading.value = true;
+      inputSearch.value = "";
+      take.value = 20;
+      skip.value = 0;
+      bookList.value = [];
+      let dataUser = JSON.parse(localStorage.getItem("token"));
+      let dataUserReady = jwtDecode(dataUser.token);
+      role.value = dataUserReady.Tipe;
+
+      let data = {
+        skip: skip.value,
+        take: take.value,
+      };
+
+      await store.dispatch("Books/getListBook", data).then((res) => {
+        console.log(res);
+        if (res.status == 200) {
+          bookList.value = bookList.value.concat(res.data[1].data.daftarBuku);
+          dataDinamic.value += res.data[1].data.count;
+          isLoading.value = false;
+          skip.value += take.value;
+        }
+      });
+    };
+
+    const categoryInput = ref("");
+    const categoryChange = async () => {
+      console.log(categoryInput.value);
+      if (categoryInput.value != "") {
+        isLoading.value = true;
+        await store
+          .dispatch("Books/filterBook", categoryInput.value)
+          .then((res) => {
+            if (res.status == 200) {
+              bookList.value = [];
+              bookList.value = bookList.value.concat(
+                res.data[1].data.daftarBuku
+              );
+              dataDinamic.value = 0;
+            }
+            console.log(res);
+          });
+        isLoading.value = false;
+      } else {
+        isLoading.value = true;
+        inputSearch.value = "";
+        take.value = 20;
+        skip.value = 0;
+        bookList.value = [];
+        let dataUser = JSON.parse(localStorage.getItem("token"));
+        let dataUserReady = jwtDecode(dataUser.token);
+        role.value = dataUserReady.Tipe;
+
+        let data = {
+          skip: skip.value,
+          take: take.value,
+        };
+
+        await store.dispatch("Books/getListBook", data).then((res) => {
+          console.log(res);
+          if (res.status == 200) {
+            bookList.value = bookList.value.concat(res.data[1].data.daftarBuku);
+            dataDinamic.value += res.data[1].data.count;
+            isLoading.value = false;
+            skip.value += take.value;
+          }
+        });
+      }
+    };
+
     return {
       role,
       bookList,
@@ -589,6 +726,13 @@ export default defineComponent({
       startBorrow,
       judulBukuSelect,
       buttonLoading,
+      inputSearch,
+      searchStart,
+      checkButtonSearch,
+      closeSearch,
+      listCategory,
+      categoryInput,
+      categoryChange,
     };
   },
 });
