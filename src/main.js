@@ -34,6 +34,8 @@ import {
   faXmark,
   faSquareArrowUpRight,
   faArrowUpRightFromSquare,
+  faBoxesStacked,
+  faUserPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -66,7 +68,9 @@ library.add(
   faCirclePlus,
   faCalendarDays,
   faSquareArrowUpRight,
-  faArrowUpRightFromSquare
+  faArrowUpRightFromSquare,
+  faBoxesStacked,
+  faUserPlus
 );
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

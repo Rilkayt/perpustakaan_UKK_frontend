@@ -14,7 +14,10 @@
           />
         </div>
       </div>
-      <div class="flex flex-col w-full h-full">
+      <div
+        class="flex flex-col w-full h-full"
+        style="display: flex; justify-content: flex-end"
+      >
         <div class="flex justify-between py-3">
           <p class="font-gunjaranti font-semibold text-black text-[0.3cm]">
             {{ penulis }}

@@ -1,7 +1,12 @@
 <template>
   <slot name="modal"></slot>
   <div>
-    <sideBar :showSideBar="conditionBar" @close="closeSide" class="z-1" />
+    <sideBar
+      :showSideBar="conditionBar"
+      :tipe="tipeUser"
+      @close="closeSide"
+      class="z-1"
+    />
     <div class="tablet:ml-64 bg-[#E7E9EE]">
       <div
         class="mobile:h-[50px] tablet:h-[60px] bg-[#D9D9D9] shadow-[0px_5px_8px_1px_rgba(0,0,0,0.3)] sticky top-0"
@@ -87,6 +92,7 @@ import baseModal from "./baseModal.vue";
 import { jwtDecode } from "jwt-decode";
 import { onMounted, ref, watchEffect } from "vue";
 import BaseModal from "./baseModal.vue";
+import { useStore } from "vuex";
 
 export default {
   name: "basePageTemp",
@@ -104,6 +110,8 @@ export default {
   setup() {
     let imageUser = ref("");
     let username = ref("");
+
+    const store = useStore();
 
     let conditionButtonSideBar = ref(false);
     let conditionBar = ref(false);
@@ -123,21 +131,27 @@ export default {
       }
     };
 
-    onMounted(() => {
+    const tipeUser = ref("");
+    onMounted(async () => {
       if (window.innerWidth < 768) {
         conditionButtonSideBar.value = true;
       }
       window.addEventListener("resize", checkConditionBtnSideBar);
-      let dataAuth = JSON.parse(localStorage.getItem("token"));
-      let dataUserReady = jwtDecode(dataAuth.token);
-      console.log(dataUserReady);
-      let dataUserImage = dataUserReady.profilAkun;
+      await store.dispatch("Account/getAccount").then((res) => {
+        console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
+        imageUser.value = res.data[1].data.ProfilAkun;
+        username.value = res.data[1].data.Username;
+        tipeUser.value = res.data[1].data.Tipe;
+      });
+      // let dataAuth = JSON.parse(localStorage.getItem("token"));
+      // let dataUserReady = jwtDecode(dataAuth.token);
+      // console.log(dataUserReady);
+      // let dataUserImage = dataUserReady.profilAkun;
       // let dataUserImageReady = dataUserImage.replace(/^\.+/, "");
       // console.log(dataUserImageReady);
-      imageUser.value = dataUserImage;
+
       console.log("🚀 ~ onMounted ~ imageUser:", imageUser.value);
 
-      username.value = dataUserReady.Username;
       console.log(window.innerWidth);
     });
 
@@ -178,6 +192,7 @@ export default {
       goToAccount,
       logOut,
       hidden,
+      tipeUser,
     };
   },
 };

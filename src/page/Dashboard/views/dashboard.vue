@@ -19,7 +19,7 @@
         </div>
 
         <!-- admin -->
-        <template v-if="role === 'ADMIN'">
+        <template v-if="role === 'ADMIN' || role === 'EMPLOYEE'">
           <div
             class="border border-[#7B7B7B] rounded-[1rem] m-5 tablet:flex tablet:justify-between"
           >
@@ -108,14 +108,14 @@
                 class="flex justify-between bg-[#D9D9D9] m-5 px-5 py-3 rounded-lg"
               >
                 <div class="flex gap-3 items-center">
-                  <p class="font-gunjaranti font-bold">1</p>
+                  <p class="font-gunjaranti font-bold">{{ index + 1 }}</p>
                   <p class="font-gunjaranti font-bold">
                     {{ allBook.buku.Judul }}
                   </p>
                 </div>
                 <div class="flex gap-7 items-center">
                   <p class="font-gunjaranti font-bold">
-                    {{ allBook.buku.Jumlah }}x
+                    {{ allBook.jumlahPinjam }}x
                   </p>
                   <a
                     :href="`/buku/detail-buku/${allBook.buku.BukuID}`"
@@ -175,9 +175,9 @@
                   >
                 </div>
               </template>
-              <div class="text-center pb-6">
+              <div class="text-center pb-6" v-if="koleksi.length > 0">
                 <a
-                  href=""
+                  href="/koleksi"
                   class="font-gunjaranti text-[#1A7DB5] font-bold text-center"
                   >Lihat Semua</a
                 >
@@ -399,10 +399,13 @@ export default defineComponent({
         if (res.data[1].data.user.Tipe === "USER") {
           role.value = res.data[1].data.user.Tipe;
           date.value = moment(new Date()).format("DD MMMM YYYY, HH:mm");
-          dateTenggat.value = moment(
-            res.data[1].data.peminjaman[0].tanggalPengembalian
-          ).format("DD MMMM YYYY");
-          borrow.value = borrow.value.concat(res.data[1].data.peminjaman);
+          if (res.data[1].data.peminjaman.length > 0) {
+            dateTenggat.value = moment(
+              res.data[1].data.peminjaman[0].tanggalPengembalian
+            ).format("DD MMMM YYYY");
+            borrow.value = borrow.value.concat(res.data[1].data.peminjaman);
+          }
+
           koleksi.value = koleksi.value.concat(res.data[1].data.koleksiBuku);
           bookRandom.value = bookRandom.value.concat(res.data[1].data.buku);
           bookCover.value = res.data[1].data.buku;

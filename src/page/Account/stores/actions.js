@@ -116,6 +116,36 @@ const actions = {
         return err;
       });
   },
+  addEmployee: async ({ commit }, data) => {
+    return await api
+      .post(`/register/add-employee/`, data, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  getEmployee: async ({ commit }) => {
+    return await api
+      .get("/get-data/employee", true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  updateEmployee: async ({ commit }, data) => {
+    return await api
+      .put(`/account/update-employee`, data, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

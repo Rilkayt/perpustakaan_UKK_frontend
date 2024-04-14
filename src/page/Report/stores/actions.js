@@ -24,6 +24,17 @@ const actions = {
         return err;
       });
   },
+  // downloadCsv: async ({ commit }, data) => {
+  //   return await api
+  //     .get(`/report/download-csv/${data.start}/${data.end}`, true)
+  //     .then((res) => {
+  //       console.log(res);
+  //       return res;
+  //     })
+  //     .catch((err) => {
+  //       return err;
+  //     });
+  // },
 };
 
 export default actions;

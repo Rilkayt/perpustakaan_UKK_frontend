@@ -141,6 +141,16 @@ const actions = {
         return err;
       });
   },
+  getKoleksi: async ({ commit }, data) => {
+    return await api
+      .get(`/get-data/collections?skip=${data.skip}&take=${data.take}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

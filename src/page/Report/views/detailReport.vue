@@ -1,17 +1,18 @@
 <template>
   <basePageTemp :titleName="'Rincian Laporan'">
     <template v-slot:content>
-      <div class="flex justify-between p-5 items-center">
+      <div class="flex justify-between px-5 pt-6 items-center">
         <p class="font-gunjarati font-semibold text-base">
           Rekap {{ dateParam }}
         </p>
-        <button
+        <!-- <button
           class="hover:bg-[#3aca6a] hover:duration-300 duration-300 px-6 py-1 rounded-md font-gunjarati font-semibold border-[1px] border-[#3aca6a]"
+          @click="downloadCsvStart"
         >
           Unduh
-        </button>
+        </button> -->
       </div>
-      <div class="w-full pt-4 px-4 duration-300">
+      <div class="w-full pt-2 px-4 duration-300">
         <template v-if="listData.length > 0">
           <div
             class="mobile:w-full p-3 border-[1px] border-[#979494] rounded-lg mb-3"
@@ -158,9 +159,22 @@ export default defineComponent({
       });
     });
 
+    // const downloadCsvStart = async () => {
+    //   window.location.href =
+    //     "http://localhost:3000/report/download-csv/2024-04-01/2024-05-01";
+    //   // let data = {
+    //   //   start: route.params.dateStart,
+    //   //   end: route.params.dateEnd,
+    //   // };
+    //   // await store.dispatch("Report/downloadCsv", data).then((res) => {
+    //   //   console.log(res);
+    //   // });
+    // };
+
     return {
       listData,
       dateParam,
+      // downloadCsvStart,
     };
   },
 });

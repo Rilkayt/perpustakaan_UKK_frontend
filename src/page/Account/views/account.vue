@@ -1,126 +1,143 @@
 <template>
   <basePageTemp :titleName="'Akun'">
     <template v-slot:content>
-      <div class="tablet:grid tablet:grid-cols-3">
-        <div>
-          <div class="w-full flex justify-center pt-4 px-4">
-            <div
-              class="mobile:h-60 mobile:w-[max-content] tablet:w-[max-content] tablet:h-80 p-3 border-[1px] border-[#979494] rounded-lg"
-            >
-              <img
-                :src="`../../../..${image}`"
-                alt=""
-                class="w-full h-full object-cover rounded-xl"
-              />
+      <template v-if="isLoading">
+        <div class="h-dvh flex items-center justify-center">
+          <p
+            class="animate-pulse duration-700 font-gunjarati text-lg text-center"
+          >
+            Memuat...
+          </p>
+        </div>
+      </template>
+      <template v-if="!isLoading">
+        <div class="tablet:grid tablet:grid-cols-3">
+          <div>
+            <div class="w-full flex justify-center pt-4 px-4">
+              <div
+                class="mobile:h-60 mobile:w-[max-content] tablet:w-[max-content] tablet:h-80 p-3 border-[1px] border-[#979494] rounded-lg"
+              >
+                <img
+                  :src="`../../../..${image}`"
+                  alt=""
+                  class="w-full h-full object-cover rounded-xl"
+                />
+              </div>
+            </div>
+            <div class="w-full text-center p-3">
+              <button
+                class="hover:bg-[#757575] hover:text-white hover:duration-300 border-[1px] border-[#757575] px-2 py-2 w-full rounded-lg font-gunjarati"
+                @click="openModalImage"
+              >
+                Ubah Profil
+              </button>
             </div>
           </div>
-          <div class="w-full text-center p-3">
-            <button
-              class="hover:bg-[#757575] hover:text-white hover:duration-300 border-[1px] border-[#757575] px-2 py-2 w-full rounded-lg font-gunjarati"
-              @click="openModalImage"
-            >
-              Ubah Profil
-            </button>
-          </div>
-        </div>
-        <div
-          class="w-full flex flex-col h-full justify-start gap-3 pt-4 px-4 col-span-2"
-        >
           <div
-            class="mobile:h-[max-content] mobile:w-30 w-full p-3 border-[1px] border-[#979494] rounded-lg"
+            class="w-full flex flex-col h-full justify-start gap-3 pt-4 px-4 col-span-2"
           >
-            <div class="dataUser">
-              <div class="mt-1 flex justify-between">
-                <div class="">
+            <div
+              class="mobile:h-[max-content] mobile:w-30 w-full p-3 border-[1px] border-[#979494] rounded-lg"
+            >
+              <div class="dataUser">
+                <div class="mt-1 flex justify-between">
+                  <div class="">
+                    <p
+                      class="font-gunjarati font-semibold text-xs text-[#888080]"
+                    >
+                      Nama Pengguna
+                    </p>
+                    <p class="font-gunjarati font-medium text-sm">
+                      {{ username }}
+                    </p>
+                  </div>
+                  <div @click="openModalDataUser">
+                    <font-awesome-icon :icon="['fas', 'pen-to-square']" />
+                  </div>
+                </div>
+                <div class="mt-2">
                   <p
                     class="font-gunjarati font-semibold text-xs text-[#888080]"
                   >
-                    Nama Pengguna
+                    Nama Lengkap
                   </p>
                   <p class="font-gunjarati font-medium text-sm">
-                    {{ username }}
+                    {{ nameFull }}
                   </p>
                 </div>
-                <div @click="openModalDataUser">
-                  <font-awesome-icon :icon="['fas', 'pen-to-square']" />
+                <div class="mt-2">
+                  <p
+                    class="font-gunjarati font-semibold text-xs text-[#888080]"
+                  >
+                    Alamat
+                  </p>
+                  <p class="font-gunjarati font-medium text-sm">
+                    {{ address != "" ? address : "-" }}
+                  </p>
+                </div>
+                <div class="mt-2">
+                  <p
+                    class="font-gunjarati font-semibold text-xs text-[#888080]"
+                  >
+                    Sekolah
+                  </p>
+                  <p class="font-gunjarati font-medium text-sm">
+                    {{ school }}
+                  </p>
                 </div>
               </div>
+            </div>
+            <div
+              class="mobile:h-[max-content] mobile:w-30 w-full p-3 border-[1px] border-[#979494] rounded-lg"
+            >
               <div class="mt-2">
                 <p class="font-gunjarati font-semibold text-xs text-[#888080]">
-                  Nama Lengkap
+                  E-mail
                 </p>
                 <p class="font-gunjarati font-medium text-sm">
-                  {{ nameFull }}
-                </p>
-              </div>
-              <div class="mt-2">
-                <p class="font-gunjarati font-semibold text-xs text-[#888080]">
-                  Alamat
-                </p>
-                <p class="font-gunjarati font-medium text-sm">
-                  {{ address != "" ? address : "-" }}
+                  {{ email }}
                 </p>
               </div>
               <div class="mt-2">
                 <p class="font-gunjarati font-semibold text-xs text-[#888080]">
-                  Sekolah
+                  No. Telepon
                 </p>
-                <p class="font-gunjarati font-medium text-sm">
-                  {{ school }}
-                </p>
+                <p class="font-gunjarati font-medium text-sm">{{ noTelp }}</p>
               </div>
             </div>
-          </div>
-          <div
-            class="mobile:h-[max-content] mobile:w-30 w-full p-3 border-[1px] border-[#979494] rounded-lg"
-          >
-            <div class="mt-2">
-              <p class="font-gunjarati font-semibold text-xs text-[#888080]">
-                E-mail
-              </p>
-              <p class="font-gunjarati font-medium text-sm">
-                {{ email }}
-              </p>
-            </div>
-            <div class="mt-2">
-              <p class="font-gunjarati font-semibold text-xs text-[#888080]">
-                No. Telepon
-              </p>
-              <p class="font-gunjarati font-medium text-sm">{{ noTelp }}</p>
-            </div>
-          </div>
-          <div
-            class="mobile:h-[max-content] mobile:w-30 w-full p-3 border-[1px] border-[#979494] rounded-lg mb-3"
-          >
-            <div class="dataUser">
-              <div class="mt-1">
-                <button
-                  class="w-full font-gunjarati bg-[#E8C13C] px-2 py-2 rounded-md hover:shadow-[2px_4px_4px_0px_rgba(0,0,0,0.3)] hover:duration-500 hover:opacity-100 duration-500 shadow-[2px_4px_4px_0px_rgba(0,0,0,0)]"
-                  @click="openModalEmail"
-                >
-                  Ubah E-mail
-                </button>
-              </div>
-              <div class="mt-2">
-                <button
-                  class="w-full font-gunjarati bg-[#E8C13C] px-2 py-2 rounded-md hover:shadow-[2px_4px_4px_0px_rgba(0,0,0,0.3)] hover:duration-500 hover:opacity-100 duration-500 shadow-[2px_4px_4px_0px_rgba(0,0,0,0)]"
-                  @click="openModalTelp"
-                >
-                  Ubah No. Telepon
-                </button>
-              </div>
-              <div class="mt-2">
-                <button
-                  class="w-full font-gunjarati bg-[#E8C13C] px-2 py-2 rounded-md hover:shadow-[2px_4px_4px_0px_rgba(0,0,0,0.3)] hover:duration-500 hover:opacity-100 duration-500 shadow-[2px_4px_4px_0px_rgba(0,0,0,0)]"
-                  @click="openModalPassOld"
-                >
-                  Ubah Kata Sandi
-                </button>
+            <div
+              class="mobile:h-[max-content] mobile:w-30 w-full p-3 border-[1px] border-[#979494] rounded-lg mb-3"
+            >
+              <div class="dataUser">
+                <div class="mt-1">
+                  <button
+                    class="w-full font-gunjarati bg-[#E8C13C] px-2 py-2 rounded-md hover:shadow-[2px_4px_4px_0px_rgba(0,0,0,0.3)] hover:duration-500 hover:opacity-100 duration-500 shadow-[2px_4px_4px_0px_rgba(0,0,0,0)]"
+                    @click="openModalEmail"
+                  >
+                    Ubah E-mail
+                  </button>
+                </div>
+                <div class="mt-2">
+                  <button
+                    class="w-full font-gunjarati bg-[#E8C13C] px-2 py-2 rounded-md hover:shadow-[2px_4px_4px_0px_rgba(0,0,0,0.3)] hover:duration-500 hover:opacity-100 duration-500 shadow-[2px_4px_4px_0px_rgba(0,0,0,0)]"
+                    @click="openModalTelp"
+                  >
+                    Ubah No. Telepon
+                  </button>
+                </div>
+                <div class="mt-2">
+                  <button
+                    class="w-full font-gunjarati bg-[#E8C13C] px-2 py-2 rounded-md hover:shadow-[2px_4px_4px_0px_rgba(0,0,0,0.3)] hover:duration-500 hover:opacity-100 duration-500 shadow-[2px_4px_4px_0px_rgba(0,0,0,0)]"
+                    @click="openModalPassOld"
+                  >
+                    Ubah Kata Sandi
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </template>
     </template>
     <template v-slot:modal>
       <baseModal
@@ -809,7 +826,9 @@ export default defineComponent({
     const inputSchool = ref("");
     const inputEmail = ref("");
 
+    const isLoading = ref(false);
     onMounted(async () => {
+      isLoading.value = true;
       try {
         await store.dispatch("Account/getAccount").then((res) => {
           console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
@@ -827,9 +846,12 @@ export default defineComponent({
           inputEmail.value = email.value;
           inputTelp.value = noTelp.value;
         });
+        isLoading.value = false;
       } catch (error) {
         console.log("🚀 ~ onMounted ~ error:", error);
+        isLoading.value = false;
       }
+      isLoading.value = false;
     });
 
     const checkModalImage = ref(false);
@@ -1536,6 +1558,7 @@ export default defineComponent({
       openModalPassNew,
       closeModalPassNew,
       buttonLoading,
+      isLoading,
     };
   },
 });

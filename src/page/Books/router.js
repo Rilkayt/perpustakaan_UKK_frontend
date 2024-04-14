@@ -2,6 +2,7 @@ import indexView from "./index.vue";
 import listBooks from "./views/listBooks.vue";
 import addBook from "./views/addBook.vue";
 import detailBook from "./views/detailBook.vue";
+import collectionUser from "./views/collectionUser.vue";
 
 const routes = [
   {
@@ -28,6 +29,20 @@ const routes = [
         path: "detail-buku/:idBuku",
         component: detailBook,
         name: "detailBook",
+        meta: {
+          requiredAuth: true,
+        },
+      },
+    ],
+  },
+  {
+    path: "/Koleksi",
+    component: indexView,
+    children: [
+      {
+        path: "",
+        component: collectionUser,
+        name: "collectionUser",
         meta: {
           requiredAuth: true,
         },
