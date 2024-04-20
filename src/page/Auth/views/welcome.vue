@@ -5,12 +5,13 @@
     <div
       class="bg-[#E7E9EE] rounded-[20px] shadow-[0px_10px_17px_1px_rgba(255,255,255,0.3)] desktop:w-[50%] p-[50px] laptop:w-[75%] laptop:p-[50px] tablet:w-[80%] tablet:p-[40px] mobile:p-[20px],"
     >
-      <h3 class="font-bold text-[30px] text-center font-gunjarati py-4">
-        Perpustakaan App
+      <h3 class="font-extrabold text-[30px] text-center font-gunjarati py-4">
+        LOCAPUS
       </h3>
 
       <p class="font-gunjarati text-base font-semibold">
-        Selamat Datang di Aplikasi Perpustakaan
+        Selamat Datang di Aplikasi Perpustakaan yaitu
+        <span class="font-extrabold">LOCAPUS</span>
       </p>
       <p class="font-gunjarati text-base text-justify">
         Ayo bangun komunitas perpustakaan di sekolah mu jadi lebih berwarna dan

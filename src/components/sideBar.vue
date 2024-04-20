@@ -9,7 +9,14 @@
   >
     <div class="p-5">
       <div class="flex justify-between">
-        <div class="w-20 h-20 bg-white rounded-xl"></div>
+        <div class="w-full h-16 flex items-center">
+          <a
+            href="/beranda"
+            class="font-bold drop-shadow-2xl text-3xl lilita-one text-white tracking-widest text-start"
+          >
+            LOCAPUS
+          </a>
+        </div>
         <template v-if="closeButton">
           <span @click="close"
             ><font-awesome-icon :icon="['fas', 'xmark']" class="text-white"
@@ -17,7 +24,10 @@
         </template>
       </div>
       <div class="height-menu">
-        <a href="/beranda" class="flex gap-3 mt-5">
+        <a
+          href="/beranda"
+          class="flex gap-3 mt-2 hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
+        >
           <font-awesome-icon
             :icon="['fas', 'house-chimney']"
             size="lg"
@@ -28,7 +38,10 @@
           </p>
         </a>
 
-        <a href="/buku" class="flex gap-4 mt-5">
+        <a
+          href="/buku"
+          class="flex gap-4 mt-5 hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
+        >
           <font-awesome-icon
             :icon="['fas', 'fa-book']"
             size="lg"
@@ -40,7 +53,7 @@
         </a>
         <a
           @click="tipe === 'USER' ? goToPeminjaman() : openOrCloseDrop()"
-          class="flex gap-3 mt-5"
+          class="flex gap-3 mt-5 hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
         >
           <font-awesome-icon
             :icon="['fas', 'box-archive']"
@@ -66,7 +79,7 @@
         <div :class="`ps-4 ${checkOpenOrClose ? 'block' : 'hidden'}`">
           <a
             href="/daftar-pinjam/belum-diambil"
-            class="flex gap-3 mt-5 text-[14px]"
+            class="flex gap-3 mt-5 text-[14px] hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
           >
             <font-awesome-icon
               :icon="['fas', 'circle-minus']"
@@ -79,7 +92,7 @@
           </a>
           <a
             href="/daftar-pinjam/belum-dikembalikan"
-            class="flex gap-3 mt-5 text-[14px]"
+            class="flex gap-3 mt-5 text-[14px] hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
           >
             <font-awesome-icon
               :icon="['fas', 'clock']"
@@ -92,7 +105,7 @@
           </a>
           <a
             href="/daftar-pinjam/sudah-dikembalikan"
-            class="flex gap-3 mt-5 text-[14px]"
+            class="flex gap-3 mt-5 text-[14px] hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
           >
             <font-awesome-icon
               :icon="['fas', 'circle-check']"
@@ -105,7 +118,10 @@
           </a>
         </div>
         <template v-if="tipe === 'ADMIN' || tipe === 'EMPLOYEE'">
-          <a href="/kategori" class="flex gap-3 mt-5">
+          <a
+            href="/kategori"
+            class="flex gap-3 mt-5 hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
+          >
             <font-awesome-icon
               :icon="['fas', 'list']"
               size="lg"
@@ -117,7 +133,10 @@
           </a>
         </template>
         <template v-if="tipe === 'USER'">
-          <a href="/koleksi" class="flex gap-3 mt-5">
+          <a
+            href="/koleksi"
+            class="flex gap-3 mt-5 hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
+          >
             <font-awesome-icon
               :icon="['fas', 'boxes-stacked']"
               size="lg"
@@ -129,7 +148,26 @@
           </a>
         </template>
         <template v-if="tipe === 'ADMIN'">
-          <a href="/petugas" class="flex gap-[0.4rem] mt-5">
+          <a
+            href="/moderator"
+            class="flex gap-[0.4rem] mt-5 hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'user-gear']"
+              size="lg"
+              style="color: #e7e9ee"
+            />
+            <p class="text-[#E7E9EE] text-sm font-bold font-gunjarati pt-1">
+              Moderator
+            </p>
+          </a>
+        </template>
+
+        <template v-if="tipe === 'ADMIN' || tipe === 'MODERATOR'">
+          <a
+            href="/petugas"
+            class="flex gap-[0.4rem] mt-5 hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
+          >
             <font-awesome-icon
               :icon="['fas', 'user-plus']"
               size="lg"
@@ -140,8 +178,13 @@
             </p>
           </a>
         </template>
-        <template v-if="tipe === 'ADMIN' || tipe === 'EMPLOYEE'">
-          <a href="/laporan" class="flex gap-3 mt-5">
+        <template
+          v-if="tipe === 'ADMIN' || tipe === 'EMPLOYEE' || tipe === 'MODERATOR'"
+        >
+          <a
+            href="/laporan"
+            class="flex gap-3 mt-5 hover:bg-[#ffffff6e] hover:p-3 hover:duration-300 duration-300 hover:rounded-lg"
+          >
             <font-awesome-icon
               :icon="['fas', 'chart-line']"
               size="lg"
@@ -242,10 +285,10 @@ export default {
 </script>
 
 <style scoped>
-.height-menu {
+/* .height-menu {
   max-height: 70vh;
   overflow-y: auto;
-}
+} */
 
 .display-block {
   display: block;

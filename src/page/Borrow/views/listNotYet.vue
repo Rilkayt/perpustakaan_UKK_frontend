@@ -48,11 +48,11 @@
                   No
                 </th>
                 <th
-                  class="w-3 p-2 font-gunjarati font-semibold tracking-wide text-sm"
+                  class="w-3 p-2 font-gunjarati font-semibold tracking-wide text-sm text-start"
                 >
                   Buku
                 </th>
-                <th class="w-3 p-3 font-gunjarati font-semibold ext-sm">
+                <th class="w-3 p-3 font-gunjarati font-semibold text-sm">
                   Pengguna
                 </th>
                 <th class="w-3 p-2 font-gunjarati font-semibold text-sm">

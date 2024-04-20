@@ -1,5 +1,5 @@
 <template>
-  <basePage :titleName="'Daftar Petugas'" :footer-right="true">
+  <basePage :titleName="'Daftar Moderator'" :footer-right="true">
     <template v-slot:content>
       <template v-for="listUserAll in listUser">
         <div class="px-3 pt-4">
@@ -18,7 +18,7 @@
               <button
                 class="font-gunjarati font-semibold text-[#ffd900e3]"
                 @click="
-                  openModalEmployee(
+                  openModalModerator(
                     listUserAll.UserID,
                     listUserAll.NamaLengkap,
                     listUserAll.Email,
@@ -36,7 +36,7 @@
     <template v-slot:footer>
       <button
         class="bg-[#E8C13C] py-2 px-4 w-28 rounded-2xl m-3"
-        @click="openModalAddEmployee"
+        @click="openModalAddModerator"
       >
         <font-awesome-icon :icon="['fas', 'plus']" />
         Tambah
@@ -44,10 +44,10 @@
     </template>
     <template v-slot:modal>
       <baseModal
-        :id="'modalAddEmployee'"
-        :title="'Tambah Petugas'"
-        :actived="checkModalAddEmployee"
-        @close="closeModalAddEmployee"
+        :id="'modalAddModerator'"
+        :title="'Tambah Moderator'"
+        :actived="checkModalAddModerator"
+        @close="closeModalAddModerator"
       >
         <template v-slot:content>
           <div class="w-full mb-3">
@@ -59,7 +59,7 @@
               name=""
               id="inputName"
               v-model="inputName"
-              :placeholder="'Nama Petugas'"
+              :placeholder="'Nama Moderator'"
               class="border-2 h-[52px] text-[15px] px-3 bg-[#40475A] rounded-[6px] text-white w-full tablet:pe-[8%] mobile:pe-[20%] outline-none mb-3"
             />
             <label for="inputEmail" class="font-gunjarati text-sm font-semibold"
@@ -70,7 +70,7 @@
               name=""
               id="inputEmail"
               v-model="inputEmail"
-              :placeholder="'Email Petugas'"
+              :placeholder="'Email Moderator'"
               class="border-2 h-[52px] text-[15px] px-3 bg-[#40475A] rounded-[6px] text-white w-full tablet:pe-[8%] mobile:pe-[20%] outline-none mb-3"
             />
             <label for="inputPass" class="font-gunjarati text-sm font-semibold"
@@ -81,7 +81,7 @@
               name=""
               id="inputPass"
               v-model="inputPass"
-              :placeholder="'Kata Sandi Petugas'"
+              :placeholder="'Kata Sandi Moderator'"
               class="border-2 h-[52px] text-[15px] px-3 bg-[#40475A] rounded-[6px] text-white w-full tablet:pe-[8%] mobile:pe-[20%] outline-none mb-3"
             />
             <label
@@ -100,7 +100,7 @@
 
             <button
               class="w-full border-[1px] border-[#E8C13C] py-2 rounded-md font-gunjarati font-semibold hover:bg-[#E8C13C] hover:text-white hover:duration-300"
-              @click="addEmployeeStart"
+              @click="addModeratorStart"
               :disabled="buttonLoading"
             >
               <svg
@@ -128,10 +128,10 @@
       </baseModal>
 
       <baseModal
-        :id="'modalEmployeeDetail'"
-        :title="'Petugas'"
-        :actived="checkModalEmployee"
-        @close="closeModalEmployee"
+        :id="'modalModeratorDetail'"
+        :title="'Moderator'"
+        :actived="checkModalModerator"
+        @close="closeModalModerator"
       >
         <template v-slot:content>
           <div class="w-full mb-3">
@@ -143,7 +143,7 @@
               name=""
               id="inputName"
               v-model="inputName"
-              :placeholder="'Nama Petugas'"
+              :placeholder="'Nama Moderator'"
               class="border-2 h-[52px] text-[15px] px-3 bg-[#40475A] rounded-[6px] text-white w-full tablet:pe-[8%] mobile:pe-[20%] outline-none mb-3"
             />
             <label for="inputEmail" class="font-gunjarati text-sm font-semibold"
@@ -154,7 +154,7 @@
               name=""
               id="inputEmail"
               v-model="inputEmail"
-              :placeholder="'Email Petugas'"
+              :placeholder="'Email Moderator'"
               class="border-2 h-[52px] text-[15px] px-3 bg-[#40475A] rounded-[6px] text-white w-full tablet:pe-[8%] mobile:pe-[20%] outline-none mb-3"
             />
             <label for="inputPass" class="font-gunjarati text-sm font-semibold"
@@ -165,18 +165,18 @@
               name=""
               id="inputPass"
               v-model="inputPass"
-              :placeholder="'Kata Sandi Petugas'"
+              :placeholder="'Kata Sandi Moderator'"
               class="border-2 h-[52px] text-[15px] px-3 bg-[#40475A] rounded-[6px] text-white w-full tablet:pe-[8%] mobile:pe-[20%] outline-none mb-3"
             />
 
             <div class="flex gap-3">
               <button
                 class="w-full border-[1px] border-[#fd5353] py-2 rounded-md font-gunjarati font-semibold hover:bg-[#fd5353] hover:text-white hover:duration-300"
-                @click="deleteEmployeeStart"
-                :disabled="btnLoadingDeleteEmployee"
+                @click="deleteModeratorStart"
+                :disabled="btnLoadingDeleteModerator"
               >
                 <svg
-                  v-if="btnLoadingDeleteEmployee"
+                  v-if="btnLoadingDeleteModerator"
                   aria-hidden="true"
                   role="status"
                   class="inline w-4 h-4 me-3 text-[#2e2d2d] animate-spin"
@@ -193,11 +193,11 @@
                     fill="currentColor"
                   />
                 </svg>
-                {{ !btnLoadingDeleteEmployee ? "Hapus" : "Memuat" }}
+                {{ !btnLoadingDeleteModerator ? "Hapus" : "Memuat" }}
               </button>
               <button
                 class="w-full border-[1px] border-[#E8C13C] py-2 rounded-md font-gunjarati font-semibold hover:bg-[#E8C13C] hover:text-white hover:duration-300"
-                @click="updateEmployeeStart"
+                @click="updateModeratorStart"
                 :disabled="buttonLoading"
               >
                 <svg
@@ -236,7 +236,7 @@ import { useStore } from "vuex";
 import { useToast } from "vue-toastification";
 
 export default {
-  name: "listEmployee",
+  name: "listModerator",
   components: {
     basePage,
     baseModal,
@@ -249,7 +249,7 @@ export default {
     const isLoading = ref(false);
     onMounted(async () => {
       isLoading.value = true;
-      await store.dispatch("Account/getEmployee").then((res) => {
+      await store.dispatch("Account/getModerator").then((res) => {
         if (res.status === 200) {
           listUser.value = listUser.value.concat(res.data[1].data);
           isLoading.value = false;
@@ -258,12 +258,12 @@ export default {
       });
     });
 
-    const checkModalAddEmployee = ref(false);
-    const openModalAddEmployee = () => {
-      checkModalAddEmployee.value = !checkModalAddEmployee.value;
+    const checkModalAddModerator = ref(false);
+    const openModalAddModerator = () => {
+      checkModalAddModerator.value = !checkModalAddModerator.value;
     };
-    const closeModalAddEmployee = () => {
-      checkModalAddEmployee.value = !checkModalAddEmployee.value;
+    const closeModalAddModerator = () => {
+      checkModalAddModerator.value = !checkModalAddModerator.value;
     };
 
     const inputName = ref("");
@@ -272,7 +272,7 @@ export default {
     const inputPassConfirm = ref("");
 
     const buttonLoading = ref(false);
-    const addEmployeeStart = async () => {
+    const addModeratorStart = async () => {
       buttonLoading.value = true;
       if (inputPass.value === inputPassConfirm.value) {
         if (
@@ -290,15 +290,15 @@ export default {
             .then(async (res) => {
               if (res.status == 200) {
                 await store
-                  .dispatch("Account/addEmployee", data)
+                  .dispatch("Account/addModerator", data)
                   .then(async (res) => {
                     if (res.status == 200) {
                       toast.success(res.data[0].message);
-                      closeModalAddEmployee();
+                      closeModalAddModerator();
                       buttonLoading.value = false;
                       listUser.value = [];
                       await store
-                        .dispatch("Account/getEmployee")
+                        .dispatch("Account/getModerator")
                         .then((res) => {
                           if (res.status === 200) {
                             listUser.value = listUser.value.concat(
@@ -328,23 +328,23 @@ export default {
     };
 
     const idUser = ref("");
-    const checkModalEmployee = ref(false);
-    const openModalEmployee = (id, name, email, password) => {
-      checkModalEmployee.value = !checkModalEmployee.value;
+    const checkModalModerator = ref(false);
+    const openModalModerator = (id, name, email, password) => {
+      checkModalModerator.value = !checkModalModerator.value;
       idUser.value = id;
       inputName.value = name;
       inputEmail.value = email;
       inputPass.value = password;
     };
-    const closeModalEmployee = () => {
-      checkModalEmployee.value = !checkModalEmployee.value;
+    const closeModalModerator = () => {
+      checkModalModerator.value = !checkModalModerator.value;
       idUser.value = "";
       inputName.value = "";
       inputEmail.value = "";
       inputPass.value = "";
     };
 
-    const updateEmployeeStart = async () => {
+    const updateModeratorStart = async () => {
       buttonLoading.value = true;
       if (inputPass.value !== "") {
         if (
@@ -363,15 +363,15 @@ export default {
             .then(async (res) => {
               if (res.status == 200) {
                 await store
-                  .dispatch("Account/updateEmployee", data)
+                  .dispatch("Account/updateModerator", data)
                   .then(async (res) => {
                     if (res.status == 200) {
                       toast.success(res.data[0].message);
-                      closeModalEmployee();
+                      closeModalModerator();
                       buttonLoading.value = false;
                       listUser.value = [];
                       await store
-                        .dispatch("Account/getEmployee")
+                        .dispatch("Account/getModerator")
                         .then((res) => {
                           if (res.status === 200) {
                             listUser.value = listUser.value.concat(
@@ -400,18 +400,18 @@ export default {
       }
     };
 
-    const btnLoadingDeleteEmployee = ref(false);
-    const deleteEmployeeStart = async () => {
-      btnLoadingDeleteEmployee.value = true;
+    const btnLoadingDeleteModerator = ref(false);
+    const deleteModeratorStart = async () => {
+      btnLoadingDeleteModerator.value = true;
       await store
-        .dispatch("Account/deleteEmployee", idUser.value)
+        .dispatch("Account/deleteModerator", idUser.value)
         .then(async (res) => {
           if (res.status === 200) {
             toast.success(res.data[0].message);
-            closeModalEmployee();
-            btnLoadingDeleteEmployee.value = false;
+            closeModalModerator();
+            btnLoadingDeleteModerator.value = false;
             listUser.value = [];
-            await store.dispatch("Account/getEmployee").then((res) => {
+            await store.dispatch("Account/getModerator").then((res) => {
               if (res.status === 200) {
                 listUser.value = listUser.value.concat(res.data[1].data);
               }
@@ -420,28 +420,28 @@ export default {
             toast.error(res.response.data[0].message);
           }
         });
-      btnLoadingDeleteEmployee.value = false;
+      btnLoadingDeleteModerator.value = false;
     };
 
     return {
-      checkModalAddEmployee,
-      openModalAddEmployee,
-      closeModalAddEmployee,
+      checkModalAddModerator,
+      openModalAddModerator,
+      closeModalAddModerator,
       inputName,
       inputEmail,
       inputPass,
       inputPassConfirm,
-      addEmployeeStart,
+      addModeratorStart,
       buttonLoading,
       isLoading,
       listUser,
-      checkModalEmployee,
-      openModalEmployee,
-      closeModalEmployee,
-      updateEmployeeStart,
+      checkModalModerator,
+      openModalModerator,
+      closeModalModerator,
+      updateModeratorStart,
       idUser,
-      deleteEmployeeStart,
-      btnLoadingDeleteEmployee,
+      deleteModeratorStart,
+      btnLoadingDeleteModerator,
     };
   },
 };

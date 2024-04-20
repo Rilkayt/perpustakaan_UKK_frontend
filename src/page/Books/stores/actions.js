@@ -33,6 +33,16 @@ const actions = {
         return err;
       });
   },
+  getBookByIdInDetail: async ({ commit }, data) => {
+    return await api
+      .get(`/books/${data.idBook}/${data.idUser}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
   getBookByIdAfterUpdate: async ({ commit }, idBook) => {
     return await api
       .get(`/books/${idBook}`, true)
@@ -154,6 +164,16 @@ const actions = {
   searchBook: async ({ commit }, data) => {
     return await api
       .get(`/get-data/search/buku/${data}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  searchKoleksi: async ({ commit }, data) => {
+    return await api
+      .get(`/get-data/search/koleksi/${data}`, true)
       .then((res) => {
         return res;
       })

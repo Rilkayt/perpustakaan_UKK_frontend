@@ -146,6 +146,57 @@ const actions = {
         return err;
       });
   },
+  deleteEmployee: async ({ commit }, data) => {
+    return await api
+      .del(`/account/delete-employee/${data}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+
+  addModerator: async ({ commit }, data) => {
+    return await api
+      .post(`/register/add-moderator/`, data, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  getModerator: async ({ commit }) => {
+    return await api
+      .get("/get-data/moderator", true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  updateModerator: async ({ commit }, data) => {
+    return await api
+      .put(`/account/update-moderator`, data, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
+  deleteModerator: async ({ commit }, data) => {
+    return await api
+      .del(`/account/delete-moderator/${data}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

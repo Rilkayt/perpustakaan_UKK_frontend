@@ -5,6 +5,11 @@
 .font-gunjarati {
   font-family: "Noto Sans Gujarati", sans-serif;
 }
+
+.lilita-one {
+  font-family: "Lilita One", sans-serif;
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

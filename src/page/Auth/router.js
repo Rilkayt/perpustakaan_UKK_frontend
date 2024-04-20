@@ -63,11 +63,11 @@ const routes = [
     ],
   },
   {
-    path: "/",
+    path: "",
     component: indexView,
     children: [
       {
-        path: "selamat-datang",
+        path: "",
         component: welcome,
         name: "welcome",
         meta: {

@@ -9,7 +9,7 @@
       <form @submit.prevent="registerReady">
         <div class="flex flex-col pb-[20px]">
           <label for="username" class="font-medium pb-[3px] font-gunjarati"
-            >Username
+            >Nama Pengguna
             <sup
               ><font-awesome-icon
                 :icon="['fas', 'star-of-life']"
@@ -20,10 +20,9 @@
           <input
             type="text"
             id="username"
-            :placeholder="'maksimal 10 karakter'"
+            :placeholder="'maksimal 10 karakter dilarang mengandung @'"
             maxlength="10"
             class="border-2 h-[48px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
-            required
             v-model="username"
           />
         </div>
@@ -44,7 +43,6 @@
             id="namaLengkap"
             :placeholder="'Masukan Nama Anda'"
             class="h-[48px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
-            required
             v-model="nameUser"
           />
         </div>
@@ -65,7 +63,6 @@
             id="email"
             :placeholder="'Masukan Email Anda'"
             class="h-[48px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
-            required
             v-model="emailUser"
           />
         </div>
@@ -86,9 +83,7 @@
             id="noTelepon"
             :placeholder="'contoh : 85159722546'"
             class="h-[48px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
-            pattern="[0-9]{12}"
             maxlength="12"
-            required
             v-model="noTelp"
             @input="validateInputTelp"
           />
@@ -122,7 +117,6 @@
               id="asalSekolah"
               name="asalSekolah"
               class="h-[48px] bg-transparent border-0 bg-none py-0 pl-4 pr-9 rounded-[6px] text-gray-400 focus:ring-2 focus:ring-inset w-[100%] mobile:text-sm"
-              required
               v-model="schoolUser"
               @change="changeSchoolUser(schoolUser)"
             >
@@ -154,7 +148,6 @@
             id="password"
             :placeholder="'masukan kata sandi'"
             class="h-[48px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
-            required
             v-model="passwordUser"
           />
         </div>
@@ -178,7 +171,6 @@
             :placeholder="'konfirmasi kata sandi'"
             class="h-[48px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
             v-model="passwordUserConfirm"
-            required
           />
         </div>
 
@@ -197,7 +189,6 @@
               class="h-full border-0 bg-transparent bg-none py-0 pl-4 pr-9 rounded-tr-lg rounded-br-lg text-gray-400 focus:ring-2 focus:ring-inset w-[100%] mobile:text-sm"
               v-model="typeUser"
               @change="changeTypeUser(typeUser)"
-              required
             >
               <option value="" class="text-black">Pilih Tipe</option>
               <option value="USER" class="text-black">USER</option>
@@ -227,7 +218,6 @@
               id="codeSchool"
               class="h-[48px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-black bg-transparent border-dotted border-2 border-slate-600"
               v-model="codeSchool"
-              required
             />
           </div>
         </Transition>
@@ -280,7 +270,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 import { useStore } from "vuex";
@@ -320,6 +310,14 @@ export default {
       });
     });
 
+    let regexUsername = /^[^@{}/.,]+$/;
+    watchEffect(() => {
+      if (regexUsername.test(username.value) == false) {
+        console.log(regexUsername.test(username.value));
+        username.value = "";
+      }
+    });
+
     const getSchoolMenu = async () => {
       let response = await store.dispatch("Auth/getSchool");
       return response;
@@ -347,12 +345,13 @@ export default {
 
     let registerReadyConfirm = false;
     const registerReady = async () => {
-      // buttonLoading.value = true;
-      // if (registerReadyConfirm) {
-      //   registerReadyConfirm = false;
-      //   return;
-      // }
-      // registerReadyConfirm = true;
+      buttonLoading.value = true;
+      if (registerReadyConfirm) {
+        registerReadyConfirm = false;
+        buttonLoading.value = false;
+        return;
+      }
+      registerReadyConfirm = true;
       if (
         username.value != "" &&
         nameUser.value != "" &&

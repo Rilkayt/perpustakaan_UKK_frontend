@@ -5,7 +5,9 @@
     <div
       class="bg-[#E7E9EE] rounded-[20px] shadow-md shadow-[#888585] desktop:w-[50%] p-[50px] laptop:w-[75%] laptop:p-[50px] tablet:w-[80%] tablet:p-[40px] mobile:p-[20px],"
     >
-      <h3 class="font-bold text-[30px] font-gunjarati py-[20px]">Masuk</h3>
+      <h3 class="font-bold text-[30px] font-gunjarati py-[20px]">
+        Ubah Kata Sandi
+      </h3>
 
       <div class="pb-[15px]">
         <label for="password" class="font-medium pb-[3px] font-gunjarati"

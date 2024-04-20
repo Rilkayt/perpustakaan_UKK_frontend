@@ -11,11 +11,36 @@
         </div>
       </template>
       <template v-if="!isLoading">
+        <div class="flex justify-end px-4 pt-7">
+          <div class="border border-[#7B7B7B] rounded-lg w-[max-content]">
+            <input
+              type="text"
+              name=""
+              id=""
+              class="px-2 py-1 bg-transparent rounded-lg outline-none text-sm"
+              :disabled="checkButtonSearch"
+              v-model="inputSearch"
+            />
+            <button @click="!checkButtonSearch ? searchStart() : closeSearch()">
+              <font-awesome-icon
+                v-if="!checkButtonSearch"
+                :icon="['fas', 'magnifying-glass']"
+                class="pe-3"
+              />
+
+              <font-awesome-icon
+                :icon="['fas', 'circle-xmark']"
+                v-if="checkButtonSearch"
+                class="pe-3"
+              />
+            </button>
+          </div>
+        </div>
         <p
           v-if="bookList.length < 1"
           class="font-gunjarati text-center flex items-center justify-center h-dvh"
         >
-          Buku di perpustakaan ini belum tersedia
+          Belum memiliki koleksi
         </p>
 
         <!-- <loadData /> -->
@@ -74,7 +99,7 @@
               </p>
               <VDatePicker
                 v-model="selectedDateStart"
-                :disabled-dates="disableDateStart"
+                :disabled-dates="disableDate"
                 :min-date="new Date().getTime()"
                 :max-date="new Date().getTime() + 7 * 24 * 60 * 60 * 1000"
               >
@@ -181,6 +206,8 @@ export default {
     const selectedDateStart = ref(null);
     const selectedDateEnd = ref(null);
 
+    const disableDate = ref([{ repeat: { weekdays: [1, 7] } }]);
+
     const dataDinamic = ref(0);
     onMounted(async () => {
       isLoading.value = true;
@@ -203,23 +230,27 @@ export default {
     });
 
     watchEffect(() => {
-      if (selectedDateStart.value != null)
+      if (selectedDateStart.value != null) {
         selectedDateStart.value = moment(selectedDateStart.value).format(
           "DD MMMM YYYY"
         );
-
-      if (selectedDateEnd.value != null) {
-        if (
-          new Date(selectedDateEnd.value).getTime() >=
-          new Date(selectedDateStart.value).getTime()
-        ) {
-          selectedDateEnd.value = moment(selectedDateEnd.value).format(
-            "DD MMMM YYYY"
-          );
-        } else {
-          selectedDateEnd.value = null;
-        }
+        selectedDateEnd.value =
+          new Date(selectedDateStart.value).getTime() + 7 * 24 * 60 * 60 * 1000;
+        selectedDateEnd.value = moment(selectedDateEnd.value).format(
+          "DD MMMM YYYY"
+        );
       }
+
+      // if (selectedDateEnd.value != null) {
+      //   if (
+      //     new Date(selectedDateEnd.value).getTime() >=
+      //     new Date(selectedDateStart.value).getTime()
+      //   ) {
+
+      //   } else {
+      //     selectedDateEnd.value = null;
+      //   }
+      // }
     });
 
     const seeDetail = (idBook) => {
@@ -317,6 +348,59 @@ export default {
       }
     };
 
+    const inputSearch = ref("");
+    const checkButtonSearch = ref(false);
+    const searchStart = async () => {
+      if (inputSearch.value == "") {
+        checkButtonSearch.value = false;
+        isLoading.value = false;
+        return;
+      }
+
+      isLoading.value = true;
+      take.value = 0;
+      skip.value = 0;
+      dataDinamic.value = 0;
+      bookList.value = [];
+
+      await store
+        .dispatch("Books/searchKoleksi", inputSearch.value)
+        .then((res) => {
+          console.log(res);
+          if (res.status == 200) {
+            checkButtonSearch.value = true;
+            bookList.value = bookList.value.concat(res.data[1].data);
+            dataDinamic.value += res.data[1].data.length;
+            isLoading.value = false;
+          }
+        });
+    };
+
+    const closeSearch = async () => {
+      isLoading.value = true;
+      inputSearch.value = "";
+      take.value = 20;
+      skip.value = 0;
+      dataDinamic.value = 0;
+      bookList.value = [];
+      checkButtonSearch.value = false;
+
+      let data = {
+        skip: skip.value,
+        take: take.value,
+      };
+
+      await store.dispatch("Books/getKoleksi", data).then((res) => {
+        console.log(res);
+        if (res.status == 200) {
+          bookList.value = bookList.value.concat(res.data[1].data);
+          dataDinamic.value += res.data[1].data.length;
+          isLoading.value = false;
+          skip.value += take.value;
+        }
+      });
+    };
+
     return {
       isLoading,
       bookList,
@@ -342,6 +426,11 @@ export default {
       judulBukuSelect,
       buttonLoading,
       seeDetail,
+      disableDate,
+      inputSearch,
+      checkButtonSearch,
+      searchStart,
+      closeSearch,
     };
   },
 };

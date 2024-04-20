@@ -9,15 +9,15 @@
 
       <div class="flex flex-col pb-[20px]">
         <label for="usernameEmail" class="font-medium pb-[3px] font-gunjarati"
-          >Username / Email</label
+          >Nama Pengguna / Email</label
         >
         <input
           type="text"
           id="usernameEmail"
-          :placeholder="'Masukan Username atau Email'"
+          :placeholder="'Masukan Nama Pengguna atau Email'"
           class="border-2 h-[52px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
           required
-          title="username atau email wajib diisi"
+          title="Nama Pengguna atau email wajib diisi"
           v-model="usernameEmail"
         />
       </div>

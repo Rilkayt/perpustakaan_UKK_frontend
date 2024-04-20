@@ -903,6 +903,7 @@ export default defineComponent({
             buttonLoading.value = false;
           } else {
             console.log(res.status);
+            toast.error(res.response.data[0].message);
             buttonLoading.value = false;
           }
         });
@@ -1392,6 +1393,10 @@ export default defineComponent({
     const checkModalOtpPass = ref(false);
     const closeModalOtpPass = () => {
       checkModalOtpPass.value = !checkModalOtpPass.value;
+      inputPassOtp1.value = "";
+      inputPassOtp2.value = "";
+      inputPassOtp3.value = "";
+      inputPassOtp4.value = "";
     };
     let otpDoneFuncPass = false;
     const checkFullOtpPass = async () => {

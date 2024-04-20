@@ -35,6 +35,7 @@
               name=""
               id=""
               class="px-2 py-1 bg-transparent rounded-lg outline-none text-sm"
+              :disabled="checkButtonSearch"
               v-model="inputSearch"
             />
             <button @click="!checkButtonSearch ? searchStart() : closeSearch()">
@@ -272,10 +273,7 @@
         @close="closeModalPinjam"
       >
         <template v-slot:content>
-          <div
-            class="bg-[#DEDDDD] rounded-tr-2xl rounded-tl-2xl"
-            v-if="role === 'USER'"
-          >
+          <div class="rounded-tr-2xl rounded-tl-2xl" v-if="role === 'USER'">
             <p class="font-gunjarati text-sm pt-4 px-3 font-semibold">
               {{ judulBukuSelect }}
             </p>
@@ -295,7 +293,7 @@
                 </p>
                 <VDatePicker
                   v-model="selectedDateStart"
-                  :disabled-dates="disableDateStart"
+                  :disabled-dates="disableDate"
                   :min-date="new Date().getTime()"
                   :max-date="new Date().getTime() + 7 * 24 * 60 * 60 * 1000"
                 >
@@ -324,7 +322,7 @@
                 >
                   <template #default="{ togglePopover }">
                     <button
-                      :disabled="selectedDateStart != null ? false : true"
+                      :disabled="true"
                       class="w-full rounded-md border-[1px] border-[#3A3737] text-end px-3 py-1"
                       @click="() => togglePopover()"
                     >
@@ -407,6 +405,7 @@ export default defineComponent({
     const selectedDateStart = ref(null);
     const selectedDateEnd = ref(null);
 
+    const disableDate = ref([{ repeat: { weekdays: [1, 7] } }]);
     const checkModal = ref(false);
     const openModal = () => {
       checkModal.value = !checkModal.value;
@@ -483,22 +482,15 @@ export default defineComponent({
     });
 
     watchEffect(() => {
-      if (selectedDateStart.value != null)
+      if (selectedDateStart.value != null) {
         selectedDateStart.value = moment(selectedDateStart.value).format(
           "DD MMMM YYYY"
         );
-
-      if (selectedDateEnd.value != null) {
-        if (
-          new Date(selectedDateEnd.value).getTime() >=
-          new Date(selectedDateStart.value).getTime()
-        ) {
-          selectedDateEnd.value = moment(selectedDateEnd.value).format(
-            "DD MMMM YYYY"
-          );
-        } else {
-          selectedDateEnd.value = null;
-        }
+        selectedDateEnd.value =
+          new Date(selectedDateStart.value).getTime() + 7 * 24 * 60 * 60 * 1000;
+        selectedDateEnd.value = moment(selectedDateEnd.value).format(
+          "DD MMMM YYYY"
+        );
       }
     });
 
@@ -606,12 +598,14 @@ export default defineComponent({
     const searchStart = async () => {
       if (inputSearch.value != "") {
         categoryInput.value = "";
+        bookList.value = [];
+        dataDinamic.value = 0;
         await store
           .dispatch("Books/searchBook", inputSearch.value)
           .then((res) => {
+            bookList.value = [];
             if (res.status == 200) {
               checkButtonSearch.value = !checkButtonSearch.value;
-              bookList.value = [];
               bookList.value = bookList.value.concat(
                 res.data[1].data.daftarBuku
               );
@@ -733,6 +727,7 @@ export default defineComponent({
       listCategory,
       categoryInput,
       categoryChange,
+      disableDate,
     };
   },
 });

@@ -38,6 +38,7 @@ import {
   faUserPlus,
   faFilter,
   faCircleXmark,
+  faUserGear,
 } from "@fortawesome/free-solid-svg-icons";
 
 library.add(
@@ -74,7 +75,8 @@ library.add(
   faBoxesStacked,
   faUserPlus,
   faFilter,
-  faCircleXmark
+  faCircleXmark,
+  faUserGear
 );
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";

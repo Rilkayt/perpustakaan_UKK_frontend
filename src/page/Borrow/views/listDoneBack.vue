@@ -150,7 +150,11 @@
       </template>
     </template>
     <template v-slot:modal>
-      <baseModal :title="'Diambil'" :actived="checkModal" @close="closeModal">
+      <baseModal
+        :title="'Ubah Status'"
+        :actived="checkModal"
+        @close="closeModal"
+      >
         <template v-slot:content>
           <div>
             <p class="font-gunjarati text-justify py-3">

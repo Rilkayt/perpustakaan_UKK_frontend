@@ -118,7 +118,9 @@
             <div class="p-3 mobile:col-span-2 laptop:col-span-1">
               <template
                 v-if="
-                  dataBook.telahDiPinjamUser > 0 && dataBook.ulasanUser == null
+                  dataBook.telahDiPinjamUser > 0 &&
+                  dataBook.ulasanUser == null &&
+                  role == 'USER'
                 "
               >
                 <button
@@ -224,8 +226,9 @@
             <p class="font-gunjarati text-sm text-black">Tanggal Peminjaman</p>
             <VDatePicker
               v-model="selectedDateStart"
-              :disabled-dates="disableDateStart"
+              :disabled-dates="disableDate"
               :min-date="new Date()"
+              :max-date="new Date().getTime() + 7 * 24 * 60 * 60 * 1000"
             >
               <template #default="{ togglePopover }">
                 <button
@@ -251,7 +254,7 @@
             >
               <template #default="{ togglePopover }">
                 <button
-                  :disabled="selectedDateStart != null ? false : true"
+                  :disabled="true"
                   class="w-full rounded-md border-[1px] border-[#3A3737] text-end px-3 py-1"
                   @click="() => togglePopover()"
                 >
@@ -537,6 +540,14 @@ export default defineComponent({
     const selectedDateStart = ref(null);
     const selectedDateEnd = ref(null);
 
+    const disableDate = ref([
+      {
+        repeat: {
+          weekdays: [1, 7],
+        },
+      },
+    ]);
+
     const buttonLoading = ref(false);
     const jumlah = ref(0);
 
@@ -557,17 +568,19 @@ export default defineComponent({
           "DD MMMM YYYY"
         );
 
-      if (selectedDateEnd.value != null) {
-        if (
-          new Date(selectedDateEnd.value).getTime() >=
-          new Date(selectedDateStart.value).getTime()
-        ) {
-          selectedDateEnd.value = moment(selectedDateEnd.value).format(
-            "DD MMMM YYYY"
-          );
-        } else {
-          selectedDateEnd.value = null;
-        }
+      if (selectedDateStart.value != null) {
+        // if (
+        //   new Date(selectedDateEnd.value).getTime() >=
+        //   new Date(selectedDateStart.value).getTime()
+        // ) {
+        selectedDateEnd.value =
+          new Date(selectedDateStart.value).getTime() + 7 * 24 * 60 * 60 * 1000;
+        selectedDateEnd.value = moment(selectedDateEnd.value).format(
+          "DD MMMM YYYY"
+        );
+        // } else {
+        //   selectedDateEnd.value = null;
+        // }
       }
 
       rating.value = Math.ceil(rating.value);
@@ -583,16 +596,18 @@ export default defineComponent({
       role.value = dataUserReady.Tipe;
       console.log("🚀 ~ onMounted ~ role.value:", role.value);
 
-      await store
-        .dispatch("Books/getBookById", route.params.idBuku)
-        .then((res) => {
-          console.log(res);
-          if (res.status === 200) {
-            dataBook.value = res.data[1].data;
-            console.log(dataBook.value);
-            isLoading.value = false;
-          }
-        });
+      let data = {
+        idBook: route.params.idBuku,
+        idUser: dataUserReady.UserID,
+      };
+      await store.dispatch("Books/getBookByIdInDetail", data).then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          dataBook.value = res.data[1].data;
+          console.log(dataBook.value);
+          isLoading.value = false;
+        }
+      });
     });
 
     const inputImage = ref(null);
@@ -815,18 +830,19 @@ export default defineComponent({
 
     const startPostUlasan = async () => {
       buttonLoading.value = true;
+
       let data = {
         idBook: route.params.idBuku,
         message: inputPesanUlasan.value,
         rating: rating.value,
       };
+
       await store.dispatch("Books/addUlasan", data).then(async (res) => {
         if (res.status === 200) {
           toast.success(res.data[0].message);
           closeModalUlasan();
-
-          toast.success(res.data[0].message);
           dataBook.value = null;
+
           await store
             .dispatch("Books/getBookById", route.params.idBuku)
             .then((res) => {
@@ -878,6 +894,7 @@ export default defineComponent({
       startPostUlasan,
       buttonLoading,
       isLoading,
+      disableDate,
     };
   },
 });

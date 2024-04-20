@@ -5,7 +5,9 @@
     <div
       class="bg-[#E7E9EE] rounded-[20px] shadow-md shadow-[#888585] desktop:w-[50%] p-[50px] laptop:w-[75%] laptop:p-[50px] tablet:w-[80%] tablet:p-[40px] mobile:p-[20px],"
     >
-      <font-awesome-icon :icon="['fas', 'arrow-left']" size="xl" />
+      <a href="/masuk"
+        ><font-awesome-icon :icon="['fas', 'arrow-left']" size="xl"
+      /></a>
       <h3 class="font-bold text-[30px] font-gunjarati py-[20px]">
         Lupa Kata Sandi
       </h3>

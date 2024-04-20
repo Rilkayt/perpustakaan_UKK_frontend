@@ -273,7 +273,7 @@
                 </p>
                 <VDatePicker
                   v-model="selectedDateStart"
-                  :disabled-dates="disableDateStart"
+                  :disabled-dates="disableDate"
                   :min-date="new Date().getTime()"
                   :max-date="new Date().getTime() + 7 * 24 * 60 * 60 * 1000"
                 >
@@ -302,7 +302,7 @@
                 >
                   <template #default="{ togglePopover }">
                     <button
-                      :disabled="selectedDateStart != null ? false : true"
+                      :disabled="true"
                       class="w-full rounded-md border-[1px] border-[#3A3737] text-end px-3 py-1"
                       @click="() => togglePopover()"
                     >
@@ -388,6 +388,14 @@ export default defineComponent({
     const selectedDateStart = ref(null);
     const selectedDateEnd = ref(null);
 
+    const disableDate = ref([
+      {
+        repeat: {
+          weekdays: [1, 7],
+        },
+      },
+    ]);
+
     const dateTenggat = ref("");
     onMounted(async () => {
       isLoading.value = true;
@@ -443,23 +451,29 @@ export default defineComponent({
     };
 
     watchEffect(() => {
-      if (selectedDateStart.value != null)
+      if (selectedDateStart.value != null) {
         selectedDateStart.value = moment(selectedDateStart.value).format(
           "DD MMMM YYYY"
         );
-
-      if (selectedDateEnd.value != null) {
-        if (
-          new Date(selectedDateEnd.value).getTime() >=
-          new Date(selectedDateStart.value).getTime()
-        ) {
-          selectedDateEnd.value = moment(selectedDateEnd.value).format(
-            "DD MMMM YYYY"
-          );
-        } else {
-          selectedDateEnd.value = null;
-        }
+        selectedDateEnd.value =
+          new Date(selectedDateStart.value).getTime() + 7 * 24 * 60 * 60 * 1000;
+        selectedDateEnd.value = moment(selectedDateEnd.value).format(
+          "DD MMMM YYYY"
+        );
       }
+
+      // if (selectedDate.value != null) {
+      //   // if (
+      //   //   new Date(selectedDateEnd.value).getTime() >=
+      //   //   new Date(selectedDateStart.value).getTime()
+      //   // ) {
+      //     selectedDateEnd.value = moment(selectedDateEnd.value).format(
+      //       "DD MMMM YYYY"
+      //     );
+      //   // } else {
+      //   //   selectedDateEnd.value = null;
+      //   // }
+      // }
     });
 
     const idBukuSelect = ref("");
@@ -564,6 +578,7 @@ export default defineComponent({
       startBorrow,
       judulBukuSelect,
       buttonLoading,
+      disableDate,
     };
   },
 });

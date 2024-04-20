@@ -1,6 +1,7 @@
 import indexView from "./index.vue";
 import account from "./views/account.vue";
 import listEmployee from "./views/listEmployee.vue";
+import listModerator from "./views/listModerator.vue";
 
 const routes = [
   {
@@ -11,6 +12,20 @@ const routes = [
         path: "",
         component: account,
         name: "account",
+        meta: {
+          requiredAuth: true,
+        },
+      },
+    ],
+  },
+  {
+    path: "/moderator",
+    component: indexView,
+    children: [
+      {
+        path: "",
+        component: listModerator,
+        name: "listModerator",
         meta: {
           requiredAuth: true,
         },

@@ -241,11 +241,10 @@ export default {
           console.log(res);
           buttonLoading.value = false;
           if (res.status == 200) {
-            toast.success("Berhasil Mendaftar Akun", {
-              hideProgressBar: true,
-              closeButton: false,
-            });
-            router.push({ name: "login" });
+            toast.success("Berhasil Mendaftar Akun");
+            setTimeout(() => {
+              window.location.href = "/masuk";
+            }, 2000);
           } else if (res.response.data[0].message == "otp tidak valid") {
             //
             toast.error("otp yang di masukan salah", {

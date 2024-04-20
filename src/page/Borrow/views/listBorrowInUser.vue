@@ -220,6 +220,7 @@ export default {
           take: take.value,
           skip: skip.value,
         };
+        listPeminjamanRiwayat.value = [];
         await store
           .dispatch("Borrow/getListRiwayatPinjam", data)
           .then((res) => {
