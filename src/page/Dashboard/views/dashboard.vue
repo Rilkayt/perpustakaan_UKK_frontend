@@ -128,17 +128,17 @@
           </div>
         </template>
         <template v-if="role === 'USER'">
-          <template v-if="borrow.length > 0">
+          <template v-if="borrow.length > 0" v-for="borrowAll in borrow">
             <div
               class="flex p-3 justify-between items-center mx-6 mt-3 bg-[#DB1010] rounded-lg"
             >
               <p class="font-gunjaranti font-semibold text-white">
-                {{ borrow[0].buku[0].Judul }}
+                {{ borrowAll.buku[0].Judul }}
               </p>
 
               <div class="flex gap-4 items-center">
                 <p class="font-gunjaranti font-semibold text-white">
-                  Tenggat, {{ dateTenggat }}
+                  Tenggat, {{ momentDateFormat(borrowAll.tanggalPengembalian) }}
                 </p>
               </div>
             </div>
@@ -546,6 +546,10 @@ export default defineComponent({
       }
     };
 
+    const momentDateFormat = (dateTime) => {
+      return moment(new Date(parseInt(dateTime))).format("DD MMMM YYYY");
+    };
+
     return {
       role,
       date,
@@ -579,6 +583,7 @@ export default defineComponent({
       judulBukuSelect,
       buttonLoading,
       disableDate,
+      momentDateFormat,
     };
   },
 });

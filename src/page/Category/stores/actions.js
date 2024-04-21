@@ -42,6 +42,16 @@ const actions = {
         return err;
       });
   },
+  getDataByIdCategorySearch: async ({ commit }, data) => {
+    return await api
+      .get(`/category/${data.idCategory}/${data.valueSearch}`, true)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
   deleteBookInCategory: async ({ commit }, data) => {
     return await api
       .del(`/category/delete-book-from-category/${data}`, true)

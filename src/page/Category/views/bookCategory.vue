@@ -11,21 +11,48 @@
         </div>
       </template>
       <template v-if="!isLoading">
-        <div class="flex justify-between px-3 pt-2">
+        <div class="flex justify-between px-3 pt-2 items-center">
           <p class="p-4 font-gunjarati">
             Kategori : <span class="font-bold">{{ nameCategory }}</span>
           </p>
-          <button
-            class="bg-[#3fa3f48a] py-2 px-4 rounded-lg m-3 font-gunjarati font-bold w-[max-content] text-xs"
-            @click="addBookToCategory"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-            Tambah Buku
-          </button>
+          <div class="flex items-center">
+            <button
+              class="bg-[#3fa3f48a] py-2 px-4 rounded-lg m-3 font-gunjarati font-bold w-[max-content] text-xs"
+              @click="addBookToCategory"
+            >
+              <font-awesome-icon :icon="['fas', 'plus']" />
+              Tambah Buku
+            </button>
+            <div
+              class="border border-[#7B7B7B] rounded-lg w-[max-content] h-[max-content]"
+            >
+              <input
+                type="text"
+                name=""
+                id=""
+                class="px-2 py-1 bg-transparent rounded-lg outline-none text-sm"
+                :disabled="checkButtonSearch"
+                v-model="inputSearch"
+              />
+              <button
+                @click="!checkButtonSearch ? searchStart() : closeSearch()"
+              >
+                <font-awesome-icon
+                  v-if="!checkButtonSearch"
+                  :icon="['fas', 'magnifying-glass']"
+                  class="pe-3"
+                />
+
+                <font-awesome-icon
+                  :icon="['fas', 'circle-xmark']"
+                  v-if="checkButtonSearch"
+                  class="pe-3"
+                />
+              </button>
+            </div>
+          </div>
         </div>
-        <div
-          class="mobile:overflow-auto desktop:overflow-hidden shadow-[1px_4px_4px_0px_rgba(0,0,0,0.3)] p-2"
-        >
+        <div class="mobile:overflow-auto desktop:overflow-hidden p-2">
           <table class="w-full mx-1 mt-">
             <thead class="bg-[#40475A] border-b-[10px]">
               <tr class="text-white">
@@ -251,6 +278,50 @@ export default {
       });
     };
 
+    const checkButtonSearch = ref(false);
+    const inputSearch = ref("");
+    const searchStart = async () => {
+      if (inputSearch.value != "") {
+        checkButtonSearch.value = true;
+        isLoading.value = true;
+        let data = {
+          idCategory: route.params.id,
+          valueSearch: inputSearch.value,
+        };
+        listBookInCategory.value = [];
+        await store
+          .dispatch("Category/getDataByIdCategorySearch", data)
+          .then((res) => {
+            console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
+            listBookInCategory.value = listBookInCategory.value.concat(
+              res.data[1].data
+            );
+            isLoading.value = false;
+          });
+        isLoading.value = false;
+      } else {
+        toast.error("form tidak boleh kosong");
+      }
+    };
+
+    const closeSearch = async () => {
+      isLoading.value = true;
+      checkButtonSearch.value = false;
+      inputSearch.value = "";
+      isLoading.value = true;
+      listBookInCategory.value = [];
+      await store
+        .dispatch("Category/getDataByIdCategory", route.params.id)
+        .then((res) => {
+          console.log("🚀 ~ awaitstore.dispatch ~ res:", res);
+          listBookInCategory.value = listBookInCategory.value.concat(
+            res.data[1].data
+          );
+          isLoading.value = false;
+        });
+      isLoading.value = false;
+    };
+
     return {
       nameCategory,
       listBookInCategory,
@@ -263,6 +334,10 @@ export default {
       addBookToCategory,
       isLoading,
       buttonLoading,
+      inputSearch,
+      searchStart,
+      checkButtonSearch,
+      closeSearch,
     };
   },
 };
