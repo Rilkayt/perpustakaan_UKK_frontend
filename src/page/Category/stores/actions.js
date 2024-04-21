@@ -82,6 +82,19 @@ const actions = {
         return err;
       });
   },
+  searchBookToAddCategory: async ({ commit }, data) => {
+    return await api
+      .get(
+        `/category/search/list-book-not-in-category/${data.idCategory}/${data.valueSearch}`,
+        true
+      )
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        return err;
+      });
+  },
 };
 
 export default actions;

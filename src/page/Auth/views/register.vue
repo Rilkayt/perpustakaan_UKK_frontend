@@ -78,15 +78,22 @@
                 style="color: #40475a" /></sup
           ></label>
 
-          <input
-            type="text"
-            id="noTelepon"
-            :placeholder="'contoh : 85159722546'"
-            class="h-[48px] text-[15px] px-[10px] bg-[#40475A] rounded-[6px] text-white"
-            maxlength="12"
-            v-model="noTelp"
-            @input="validateInputTelp"
-          />
+          <div class="relative">
+            <div
+              class="absolute bg-[#C8CACF] h-full w-max px-3 rounded-tl-[5px] rounded-bl-[5px] flex items-center pt-1"
+            >
+              <p class="font-gunjarati font-bold">+62</p>
+            </div>
+            <input
+              type="text"
+              id="noTelepon"
+              :placeholder="'85159722546'"
+              class="h-[48px] text-[15px] ps-14 pe-[10px] bg-[#40475A] rounded-[6px] text-white w-full"
+              maxlength="12"
+              v-model="noTelp"
+              @input="validateInputTelp"
+            />
+          </div>
         </div>
 
         <div class="flex flex-col pb-[20px]">

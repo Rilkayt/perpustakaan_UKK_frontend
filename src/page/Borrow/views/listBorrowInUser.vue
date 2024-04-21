@@ -189,7 +189,9 @@ export default {
     };
 
     const momentTanggal = (dateParam) => {
-      return moment(dateParam).format("DD MMMM YYYY");
+      return moment(new Date(parseInt(dateParam)).getTime()).format(
+        "DD MMMM YYYY"
+      );
     };
 
     const filterInput = ref("");

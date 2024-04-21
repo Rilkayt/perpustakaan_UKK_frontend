@@ -11,9 +11,38 @@
         </div>
       </template>
       <template v-if="!isLoading">
-        <p class="px-4 font-gunjarati pt-3">
-          Kategori : <span class="font-bold">{{ nameCategory }}</span>
-        </p>
+        <div
+          class="flex h-[max-content] items-center justify-between px-5 py-4"
+        >
+          <div>
+            <p class="font-gunjarati">
+              Kategori : <span class="font-bold">{{ nameCategory }}</span>
+            </p>
+          </div>
+          <div class="border border-[#7B7B7B] rounded-lg w-[max-content]">
+            <input
+              type="text"
+              name=""
+              id=""
+              class="px-2 py-1 bg-transparent rounded-lg outline-none text-sm"
+              :disabled="checkButtonSearch"
+              v-model="inputSearch"
+            />
+            <button @click="!checkButtonSearch ? searchStart() : closeSearch()">
+              <font-awesome-icon
+                v-if="!checkButtonSearch"
+                :icon="['fas', 'magnifying-glass']"
+                class="pe-3"
+              />
+
+              <font-awesome-icon
+                :icon="['fas', 'circle-xmark']"
+                v-if="checkButtonSearch"
+                class="pe-3"
+              />
+            </button>
+          </div>
+        </div>
         <div
           class="px-4 pt-2 tablet:grid tablet:grid-cols-2 laptop:grid-cols-3 tablet:gap-2"
         >
@@ -94,26 +123,97 @@ export default {
         idBook: idBookInput,
         idCategory: route.params.idCategory,
       };
+
       await store
         .dispatch("Category/addBookInCategory", data)
         .then(async (res) => {
           if (res.status === 200) {
-            toast.success(res.data[0].message);
-            listBook.value = [];
-            await store
-              .dispatch(
-                "Category/getBookToAddCategory",
-                route.params.idCategory
-              )
-              .then((res) => {
-                console.log("🚀 ~ ).then ~ res:", res);
+            if (checkButtonSearch.value == true) {
+              isLoading.value = true;
+              listBook.value = [];
+              let data = {
+                idCategory: route.params.idCategory,
+                valueSearch: inputSearch.value,
+              };
 
-                if (res.status === 200) {
-                  listBook.value = listBook.value.concat(res.data[1].data);
-                }
-              });
+              toast.success("Buku Berhasil Masuk Ke Kategori");
+              await store
+                .dispatch("Category/searchBookToAddCategory", data)
+                .then((res) => {
+                  console.log("🚀 ~ ).then ~ res:", res);
+
+                  if (res.status === 200) {
+                    listBook.value = listBook.value.concat(res.data[1].data);
+                    isLoading.value = false;
+                  }
+                  isLoading.value = false;
+                });
+              isLoading.value = false;
+            } else {
+              toast.success("Buku Berhasil Masuk Ke Kategori");
+              listBook.value = [];
+              await store
+                .dispatch(
+                  "Category/getBookToAddCategory",
+                  route.params.idCategory
+                )
+                .then((res) => {
+                  console.log("🚀 ~ ).then ~ res:", res);
+
+                  if (res.status === 200) {
+                    listBook.value = listBook.value.concat(res.data[1].data);
+                  }
+                });
+            }
           }
         });
+    };
+
+    const checkButtonSearch = ref(false);
+    const inputSearch = ref("");
+    const searchStart = async () => {
+      if (inputSearch.value != "") {
+        checkButtonSearch.value = true;
+        isLoading.value = true;
+        listBook.value = [];
+        let data = {
+          idCategory: route.params.idCategory,
+          valueSearch: inputSearch.value,
+        };
+        await store
+          .dispatch("Category/searchBookToAddCategory", data)
+          .then((res) => {
+            console.log("🚀 ~ ).then ~ res:", res);
+
+            if (res.status === 200) {
+              listBook.value = listBook.value.concat(res.data[1].data);
+              isLoading.value = false;
+            }
+            isLoading.value = false;
+          });
+        isLoading.value = false;
+      } else {
+        toast.error("form tidak boleh kosong");
+      }
+    };
+
+    const closeSearch = async () => {
+      isLoading.value = true;
+      checkButtonSearch.value = false;
+      inputSearch.value = "";
+      listBook.value = [];
+      await store
+        .dispatch("Category/getBookToAddCategory", route.params.idCategory)
+        .then((res) => {
+          console.log("🚀 ~ ).then ~ res:", res);
+
+          if (res.status === 200) {
+            listBook.value = listBook.value.concat(res.data[1].data);
+            isLoading.value = false;
+          }
+          isLoading.value = false;
+        });
+      isLoading.value = false;
     };
 
     return {
@@ -121,6 +221,10 @@ export default {
       listBook,
       addBookInCategory,
       isLoading,
+      inputSearch,
+      searchStart,
+      checkButtonSearch,
+      closeSearch,
     };
   },
 };

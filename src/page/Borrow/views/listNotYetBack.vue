@@ -266,7 +266,9 @@ export default defineComponent({
     };
 
     const momentTanggalPengembalian = (tanggalPengembalian) => {
-      return moment(tanggalPengembalian).format("DD MMMM YYYY");
+      return moment(new Date(parseInt(tanggalPengembalian))).format(
+        "DD MMMM YYYY"
+      );
     };
 
     const openCall = (noTelp) =>
